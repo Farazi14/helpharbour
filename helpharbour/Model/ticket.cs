@@ -3,6 +3,7 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace helpharbour.Model
 {
+    [BsonIgnoreExtraElements]
     public class ticket
     {
         [BsonElement("ticketID")]

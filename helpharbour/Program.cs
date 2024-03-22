@@ -1,8 +1,13 @@
+using helpharbour.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllersWithViews();
+
+// adding the mongoDB connection
+builder.Services.AddSingleton<MongoDBConnection>();
 
 var app = builder.Build();
 

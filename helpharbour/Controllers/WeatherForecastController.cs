@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using helpharbour.Model;
+using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;
 using MongoDB.Driver;
 
@@ -17,14 +18,15 @@ namespace helpharbour.Controllers
             _logger = logger;
         }
 
+
         [HttpGet]
-        public IEnumerable<WeatherForecast> Get()
+        public IEnumerable<ticket> Get()
         {
-            var client = new MongoClient("mongodb+srv://fa152:<password>@cluster0.ims6w54.mongodb.net/?retryWrites=true&w=majority");
+            var client = new MongoClient("mongodb+srv://fa152:@cluster0.ims6w54.mongodb.net/?retryWrites=true&w=majority");
             var database = client.GetDatabase("helpharbourDB");
-            var collection = database.GetCollection<BsonDocument>("ticket");
-            collection.Find(new BsonDocument()).ToList().ForEach(Console.WriteLine);
-            return null;
+            var collection = database.GetCollection<ticket>("ticket");
+
+            return collection.Find(ticket => true).ToList();
         }
     }
 }
