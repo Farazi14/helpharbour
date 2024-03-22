@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MongoDB.Bson;
+using MongoDB.Driver;
 
 namespace helpharbour.Controllers
 {
@@ -6,10 +8,7 @@ namespace helpharbour.Controllers
     [Route("[controller]")]
     public class WeatherForecastController : ControllerBase
     {
-        private static readonly string[] Summaries = new[]
-        {
-        "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-    };
+        
 
         private readonly ILogger<WeatherForecastController> _logger;
 
@@ -21,13 +20,11 @@ namespace helpharbour.Controllers
         [HttpGet]
         public IEnumerable<WeatherForecast> Get()
         {
-            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-            {
-                Date = DateTime.Now.AddDays(index),
-                TemperatureC = Random.Shared.Next(-20, 55),
-                Summary = Summaries[Random.Shared.Next(Summaries.Length)]
-            })
-            .ToArray();
+            var client = new MongoClient("mongodb+srv://fa152:<password>@cluster0.ims6w54.mongodb.net/?retryWrites=true&w=majority");
+            var database = client.GetDatabase("helpharbourDB");
+            var collection = database.GetCollection<BsonDocument>("ticket");
+            collection.Find(new BsonDocument()).ToList().ForEach(Console.WriteLine);
+            return null;
         }
     }
 }
