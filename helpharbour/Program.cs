@@ -1,4 +1,5 @@
-using helpharbour.Services;
+using helpharbour.Services; // adding the services
+using helpharbour.DAO;  // adding the DAO
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +9,9 @@ builder.Services.AddControllersWithViews();
 
 // adding the mongoDB connection
 builder.Services.AddSingleton<MongoDBConnection>();
+
+//adding the ticketDAO
+builder.Services.AddTransient<TicketDAO>();
 
 var app = builder.Build();
 
