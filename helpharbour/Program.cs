@@ -8,7 +8,7 @@ builder.Services.AddControllersWithViews();
 
 // adding the mongoDB connection
 builder.Services.AddSingleton<MongoDBConnection>(conn => new MongoDBConnection(builder.Configuration));
-Console.WriteLine($"Environment Variable MONGODB_URI: {Environment.GetEnvironmentVariable("MONGODB_URI")}");
+
 //adding the ticketDAO
 builder.Services.AddTransient<TicketDAO>();
 

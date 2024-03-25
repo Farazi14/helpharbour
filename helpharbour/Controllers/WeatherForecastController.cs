@@ -7,7 +7,7 @@ using MongoDB.Driver;
 namespace helpharbour.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class TicketController : ControllerBase
     {
         
