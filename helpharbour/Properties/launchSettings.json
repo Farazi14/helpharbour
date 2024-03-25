@@ -6,7 +6,7 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
         "ASPNETCORE_HOSTINGSTARTUPASSEMBLIES": "Microsoft.AspNetCore.SpaProxy",
-        "MONGODB_URI": "mongodb+srv://fa152:cisco123$$*M@cluster0.ims6w54.mongodb.net//?retryWrites/=true&w/=majority"
+       
       },
       "applicationUrl": "https://localhost:7260;http://localhost:5153"
     },
