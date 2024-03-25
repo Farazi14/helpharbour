@@ -1,9 +1,11 @@
-﻿using MongoDB.Driver;
+﻿using System;
+using MongoDB.Driver;
 
 namespace helpharbour.Services
 {
     public class MongoDBConnection
     {
+
         // Database connection variable
         private readonly IMongoDatabase database;
 
@@ -11,6 +13,12 @@ namespace helpharbour.Services
         public MongoDBConnection(IConfiguration configuration)
         {
             var connectionString = configuration["MONGODB_URI"];
+
+            if (string.IsNullOrEmpty(connectionString))
+            {
+                throw new InvalidOperationException("MONGODB_URI is not configured.");
+            }
+
             var client = new MongoClient(connectionString);
             database = client.GetDatabase("helpharbourDB");
         }
