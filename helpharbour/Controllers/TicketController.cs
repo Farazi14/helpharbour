@@ -1,30 +1,27 @@
 ﻿using helpharbour.DAO;
 using helpharbour.Model;
 using Microsoft.AspNetCore.Mvc;
-using MongoDB.Bson;
-using MongoDB.Driver;
+
 
 namespace helpharbour.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class WeatherForecastController : ControllerBase
+    public class TicketController : ControllerBase
     {
-        
-
-        private readonly ILogger<WeatherForecastController> _logger;
+        private readonly ILogger<TicketController> logger1;
         private readonly TicketDAO _ticketDAO; // Injected TicketDAO
 
         // Adjust the constructor to include TicketDAO
-        public WeatherForecastController(ILogger<WeatherForecastController> logger, TicketDAO ticketDAO)
+        public TicketController(ILogger<TicketController> logger, TicketDAO ticketDAO)
         {
-            _logger = logger;
+            logger1 = logger;
             _ticketDAO = ticketDAO; // Initialize TicketDAO
         }
 
 
         [HttpGet]
-       public ActionResult<IEnumerable<ticket>> Get() // Ensure the return type matches your model
+        public ActionResult<IEnumerable<ticket>> Get() // Ensure the return type matches your model
         {
             try
             {
@@ -33,9 +30,10 @@ namespace helpharbour.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "An error occurred while fetching tickets.");
+                logger1.LogError(ex, "An error occurred while fetching tickets.");
                 return StatusCode(500, "Internal server error"); // Handle exceptions gracefully
             }
         }
+
     }
 }
