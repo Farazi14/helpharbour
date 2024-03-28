@@ -21,5 +21,12 @@ namespace helpharbour.DAO
         {
             return ticket_Collection.Find(ticket => true).ToList();
         }
+
+        // method to add a ticket
+        public ticket AddTicket(ticket newTicket)
+        {
+            ticket_Collection.InsertOne(newTicket);
+            return newTicket;
+        }
     }
 }

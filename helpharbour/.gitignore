@@ -230,3 +230,6 @@ _Pvt_Extensions
 
 # FAKE - F# Make
 .fake/
+
+# Exclude the Visual Studio Code launch settings file
+**/launchSettings.json

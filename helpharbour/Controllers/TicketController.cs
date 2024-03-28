@@ -6,31 +6,42 @@ using Microsoft.AspNetCore.Mvc;
 namespace helpharbour.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class TicketController : ControllerBase
     {
-        private readonly ILogger<TicketController> logger1;
         private readonly TicketDAO _ticketDAO; // Injected TicketDAO
 
         // Adjust the constructor to include TicketDAO
-        public TicketController(ILogger<TicketController> logger, TicketDAO ticketDAO)
+        public TicketController(TicketDAO ticketDAO)
         {
-            logger1 = logger;
             _ticketDAO = ticketDAO; // Initialize TicketDAO
         }
 
-
         [HttpGet]
-        public ActionResult<IEnumerable<ticket>> Get() // Ensure the return type matches your model
+        public ActionResult<IEnumerable<ticket>> Get() // Ensure the return type matches your model because of <ticket> in the ActionResult
         {
             try
             {
                 var tickets = _ticketDAO.GetAllTickets();
                 return Ok(tickets); // Return the tickets with HTTP 200 OK
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                logger1.LogError(ex, "An error occurred while fetching tickets.");
+                return StatusCode(500, "Internal server error"); // Handle exceptions gracefully
+            }
+        }
+
+        [HttpPost]
+
+        public ActionResult<ticket> Post([FromBody] ticket newTicket)
+        {
+            try
+            {
+                var create_Ticket = _ticketDAO.AddTicket(newTicket);
+                return CreatedAtAction(nameof(Get), new { id = create_Ticket.ticketID }, create_Ticket); 
+            }
+            catch (Exception)
+            {
                 return StatusCode(500, "Internal server error"); // Handle exceptions gracefully
             }
         }

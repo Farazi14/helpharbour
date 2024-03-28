@@ -6,7 +6,7 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
         "ASPNETCORE_HOSTINGSTARTUPASSEMBLIES": "Microsoft.AspNetCore.SpaProxy",
-       
+        "MONGODB_URI": "mongodb+srv://fa152:cisco123$$*MO@cluster0.ims6w54.mongodb.net/?retryWrites=true&w=majority"
       },
       "applicationUrl": "https://localhost:7260;http://localhost:5153"
     },
@@ -15,7 +15,8 @@
       "launchBrowser": true,
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "ASPNETCORE_HOSTINGSTARTUPASSEMBLIES": "Microsoft.AspNetCore.SpaProxy"
+        "ASPNETCORE_HOSTINGSTARTUPASSEMBLIES": "Microsoft.AspNetCore.SpaProxy",
+        " MONGODB_URI": "mongodb+srv:/fa152:cisco123$$*MO@cluster0.ims6w54.mongodb.net/?retryWrites=true&w=majority"
       }
     }
   },
