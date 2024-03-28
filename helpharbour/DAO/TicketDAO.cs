@@ -46,5 +46,11 @@ namespace helpharbour.DAO
             ticket_Collection.InsertOne(newTicket);
             return newTicket;
         }
+
+        // method to update a ticket
+        public void UpdateTicket(int ticketId, ticket ticket)
+        {
+            ticket_Collection.ReplaceOne(t => t.ticketID == ticketId, ticket);
+        }
     }
 }

@@ -66,5 +66,25 @@ namespace helpharbour.Controllers
             }
         }
 
+        // Implementation to update a ticket
+        [HttpPut("{ticketId}")]
+        public ActionResult<ticket> Put(int ticketId, [FromBody] ticket updatedTicket)
+        {
+            try
+            {
+                var ticket = _ticketDAO.GetTicketById(ticketId);
+                if (ticket == null)
+                {
+                    return NotFound(); 
+                }
+                updatedTicket.ticketID = ticketId;  
+                _ticketDAO.UpdateTicket(ticketId, updatedTicket);
+                return Ok(updatedTicket); 
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Internal server error"); 
+            }
+        }
     }
 }
