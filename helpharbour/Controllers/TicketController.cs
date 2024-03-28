@@ -42,7 +42,7 @@ namespace helpharbour.Controllers
             }
             catch (Exception)
             {
-                return StatusCode(500, "Internal server error"); // Handle exceptions gracefully
+                return StatusCode(500, "Internal server error"); 
             }
         }
 
