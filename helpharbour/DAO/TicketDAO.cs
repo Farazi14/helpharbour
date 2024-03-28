@@ -22,6 +22,12 @@ namespace helpharbour.DAO
             return ticket_Collection.Find(ticket => true).ToList();
         }
 
+        // method to get a ticket by ID
+        public ticket GetTicketById(int ticketId)
+        {
+            return ticket_Collection.Find(ticket => ticket.ticketID == ticketId).FirstOrDefault();
+        }
+
         // method to add a ticket
         public ticket AddTicket(ticket newTicket)
         {
