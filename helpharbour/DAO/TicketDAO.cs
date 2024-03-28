@@ -52,5 +52,11 @@ namespace helpharbour.DAO
         {
             ticket_Collection.ReplaceOne(t => t.ticketID == ticketId, ticket);
         }
+
+        // method to delete a ticket
+        public void DeleteTicket(int ticketId)
+        {
+            ticket_Collection.DeleteOne(ticket => ticket.ticketID == ticketId);
+        }
     }
 }

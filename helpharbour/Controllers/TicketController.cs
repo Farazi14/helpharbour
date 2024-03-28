@@ -75,11 +75,31 @@ namespace helpharbour.Controllers
                 var ticket = _ticketDAO.GetTicketById(ticketId);
                 if (ticket == null)
                 {
-                    return NotFound(); 
+                    return NotFound(); // Return HTTP 404 Not Found if ticket is not found
                 }
                 updatedTicket.ticketID = ticketId;  
                 _ticketDAO.UpdateTicket(ticketId, updatedTicket);
                 return Ok(updatedTicket); 
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Internal server error"); 
+            }
+        }
+
+        // Implementation to delete a ticket
+        [HttpDelete("{ticketId}")]
+        public ActionResult Delete(int ticketId)
+        {
+            try
+            {
+                var ticket = _ticketDAO.GetTicketById(ticketId);
+                if (ticket == null)
+                {
+                    return NotFound(); 
+                }
+                _ticketDAO.DeleteTicket(ticketId);
+                return NoContent(); // Return HTTP 204 No Content
             }
             catch (Exception)
             {
