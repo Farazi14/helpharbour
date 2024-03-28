@@ -25,6 +25,18 @@ namespace helpharbour.DAO
         // method to add a ticket
         public ticket AddTicket(ticket newTicket)
         {
+            // Implementation to define the highest ticketID
+            var largestTicketID = ticket_Collection
+                              .Find(ticket => true)
+                              .SortByDescending(ticket => ticket.ticketID)
+                              .Limit(1)
+                              .FirstOrDefault()?.ticketID ?? 0;
+
+
+            // Increment the ticketID to ensure uniqueness
+            newTicket.ticketID = largestTicketID + 1;
+
+            // Insert the new ticket
             ticket_Collection.InsertOne(newTicket);
             return newTicket;
         }

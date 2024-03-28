@@ -32,7 +32,6 @@ namespace helpharbour.Controllers
         }
 
         [HttpPost]
-
         public ActionResult<ticket> Post([FromBody] ticket newTicket)
         {
             try
