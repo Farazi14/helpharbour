@@ -1,0 +1,54 @@
+﻿using helpharbour.DAO;
+using helpharbour.Model;
+using Microsoft.AspNetCore.Mvc;
+
+namespace helpharbour.Controllers
+{
+    [ApiController]
+    [Route("api/[controller]")]
+    public class UserAccountController : ControllerBase
+    {
+        private readonly UserAccountDAO _userAccountDAO; // Injected UserAccountDAO
+
+        // Adjust the constructor to include UserAccountDAO
+        public UserAccountController(UserAccountDAO userAccountDAO)
+        {
+            _userAccountDAO = userAccountDAO; // Initialize UserAccountDAO
+        }
+
+        [HttpGet]
+        public ActionResult<IEnumerable<UserAccount>> Get() 
+        {
+            try
+            {
+                var userAccounts = _userAccountDAO.GetAllUserAccounts();
+                return Ok(userAccounts); // Return the userAccounts with HTTP 200 OK
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Internal server error"); // Handle exceptions gracefully
+            }
+        }
+
+        // Implementation to get a user account by ID
+        [HttpGet("{userID}")]
+        public ActionResult<UserAccount> Get(int userID)
+        {
+            try
+            {
+                var userAccount = _userAccountDAO.GetUserAccountById(userID);
+                if (userAccount == null)
+                {
+                    return NotFound(); // Return HTTP 404 Not Found if user account is not found
+                }
+                return Ok(userAccount); // successful response with the user account
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Internal server error"); // Handle exceptions gracefully
+            }
+        }
+
+
+    }
+}

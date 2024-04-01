@@ -9,8 +9,9 @@ builder.Services.AddControllersWithViews();
 // adding the mongoDB connection
 builder.Services.AddSingleton<MongoDBConnection>(conn => new MongoDBConnection(builder.Configuration));
 
-//adding the ticketDAO
+//adding DAOs
 builder.Services.AddTransient<TicketDAO>();
+builder.Services.AddTransient<UserAccountDAO>();
 
 var app = builder.Build();
 

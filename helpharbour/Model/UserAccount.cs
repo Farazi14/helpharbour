@@ -18,7 +18,7 @@ namespace helpharbour.Model
         public string role { get; set; }
 
         [BsonElement("groupName")]
-        public string groupName { get; set; }
+        public string groupName { get; set; }   
        
     }
 }
