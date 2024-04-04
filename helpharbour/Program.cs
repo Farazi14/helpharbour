@@ -13,6 +13,7 @@ builder.Services.AddSingleton<MongoDBConnection>(conn => new MongoDBConnection(b
 builder.Services.AddTransient<TicketDAO>();
 builder.Services.AddTransient<UserAccountDAO>();
 builder.Services.AddTransient<CommentDAO>();
+builder.Services.AddTransient<faqDAO>();
 
 var app = builder.Build();
 
