@@ -9,14 +9,17 @@ namespace helpharbour.Model
         [BsonElement("commentID")]
         public int commentID { get; set; }
 
-        [BsonElement("ticketID")]
-        public int ticketID { get; set; }
-
         [BsonElement("message")]
         public string message { get; set; }
 
+
+        [BsonElement("ticketID")]
+        public int ticketID { get; set; }
+
+        
+
         [BsonElement("timestamp")]
-        public int timestamp { get; set; }
+        public DateTime timestamp { get; set; }
 
        
     }

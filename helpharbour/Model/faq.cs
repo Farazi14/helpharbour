@@ -6,7 +6,7 @@ namespace helpharbour.Model
     public class faq
     {
         [BsonElement("articleID")]
-        public int approvalID { get; set; }
+        public int articleID { get; set; }
 
         [BsonElement("title")]
         public string title { get; set; }

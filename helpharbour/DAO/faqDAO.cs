@@ -20,5 +20,39 @@ namespace helpharbour.DAO
         {
             return faq_Collection.Find(faq => true).ToList();
         }
+
+        // method to get a faq by ID
+        public faq GetFaqById(int faqId)
+        {
+            return faq_Collection.Find<faq>(faq => faq.articleID == faqId).FirstOrDefault();
+        }
+
+        // method to add a faq
+        public faq AddFaq(faq newfaq)
+        {
+            var largestFaqID = faq_Collection
+                              .Find(faq => true)
+                              .SortByDescending(faq => faq.articleID)
+                              .Limit(1)
+                              .FirstOrDefault()?.articleID ?? 0;
+
+            newfaq.articleID = largestFaqID + 1;
+
+            faq_Collection.InsertOne(newfaq);
+            return newfaq;
+        }
+
+        // method to update a faq
+        public void UpdateFaq(int faqID, faq faq)
+        {
+            faq_Collection.ReplaceOne(f => f.articleID == faqID, faq);
+        }
+
+        // method to delete a faq
+        public void DeleteFaq(int faqID)
+        {
+            faq_Collection.DeleteOne(faq => faq.articleID == faqID);
+        }
+
     }
 }
