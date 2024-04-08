@@ -97,7 +97,7 @@ namespace helpharbour.Controllers
         {
             try
             {
-                var userAccount = _userAccountDAO.Authenticate(credentials.username, credentials.password);
+                var userAccount = _userAccountDAO.Authenticate(credentials.username, credentials.password);  // VERIFY THE USERNAME AND PASSWORD TO BE CORRECT PROPERTIES
 
                 if (userAccount == null)
                 {
