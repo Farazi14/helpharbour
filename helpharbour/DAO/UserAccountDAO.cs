@@ -49,6 +49,17 @@ namespace helpharbour.DAO
         {
             userAccount_Collection.DeleteOne(userAccount => userAccount.userID == userID);
         }
+        public UserAccount Authenticate(string username, string password)
+        {
+            var userAccount = userAccount_Collection.Find<UserAccount>(user => user.username == username && user.password == password).FirstOrDefault();
 
+            if (userAccount != null)
+            {
+               
+                userAccount.password = null;
+            }
+
+            return userAccount;
+        }
     }
 }

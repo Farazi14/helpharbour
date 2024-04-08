@@ -91,5 +91,28 @@ namespace helpharbour.Controllers
             }
         }
 
+        // implement the authenticate method
+        [HttpPost("authenticate")]
+        public ActionResult<UserAccount> Authenticate([FromBody] UserAccount credentials)
+        {
+            try
+            {
+                var userAccount = _userAccountDAO.Authenticate(credentials.username, credentials.password);
+
+                if (userAccount == null)
+                {
+                    return Unauthorized("Username or password is incorrect");
+                }
+
+               return Ok(userAccount);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Internal server error");
+            }
+        }
+
+
+
     }
 }
