@@ -8,13 +8,17 @@ export function useAuth() {
 
 export const AuthProvider = ({ children }) => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [user, setUser] = useState(null); // State to hold user details
 
-    const setLoggedIn = (loggedIn) => {
+    const setLoggedIn = (loggedIn, userDetails) => {
         setIsLoggedIn(loggedIn);
+        setUser(userDetails); // Set user details when logged in
+        
     };
-
+    
     return (
-        <AuthContext.Provider value={{ isLoggedIn, setLoggedIn }}>
+        <AuthContext.Provider value={{ isLoggedIn, user, setLoggedIn }}>  {/* Pass the user state to the provider*/}
+    
             {children}
         </AuthContext.Provider>
     );

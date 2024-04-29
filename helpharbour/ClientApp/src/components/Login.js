@@ -23,7 +23,8 @@ const Login = () => {
 
         if (response.ok) {
             // If authentication is successful
-            setLoggedIn(true);
+            const userDetails = await response.json(); // get the user details
+            setLoggedIn(true, userDetails); // Update the logged-in state
             navigate('/dashboard');
         } else {
             // If authentication fails
@@ -57,11 +58,11 @@ const Login = () => {
                                 <Button color="secondary" onClick={handleReset}>Reset</Button>
                             </div>
                         </Form>
-                        <div className="text-center mt-4">
-                            <hr />
-                            <p>Please click the following link to sign up</p>
-                            <Button color="link">Register</Button>
-                        </div>
+                        {/*<div className="text-center mt-4">*/}
+                        {/*    <hr />*/}
+                        {/*    <p>Please click the following link to sign up</p>*/}
+                        {/*    <Button color="link">Register</Button>*/}
+                        {/*</div>*/}
                     </Col>
                 </Row>
             </Container>
