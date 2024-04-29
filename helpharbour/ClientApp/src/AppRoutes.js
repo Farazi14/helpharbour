@@ -1,6 +1,6 @@
 import { Counter } from "./components/Counter";
 import { FetchData } from "./components/FetchData";
-import { Dashboard } from "./components/Dashboard";
+import  Dashboard  from "./components/Dashboard";  // using the Dashboard component after converting to functional component
 import Login from "./components/Login"; 
 
 const AppRoutes = [
