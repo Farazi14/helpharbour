@@ -13,7 +13,7 @@ const Login = () => {
         event.preventDefault();
 
         // Send a request to the backend for authentication
-        const response = await fetch('https://localhost:7260/api/useraccount', {
+        const response = await fetch('api/useraccount/authenticate', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

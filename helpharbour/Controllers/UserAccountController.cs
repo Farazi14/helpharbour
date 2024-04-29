@@ -1,6 +1,7 @@
 ﻿using helpharbour.DAO;
 using helpharbour.Model;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace helpharbour.Controllers
 {
@@ -9,11 +10,13 @@ namespace helpharbour.Controllers
     public class UserAccountController : ControllerBase
     {
         private readonly UserAccountDAO _userAccountDAO; // Injected UserAccountDAO
+        private readonly ILogger<UserAccountController> _logger;
 
         // Adjust the constructor to include UserAccountDAO
-        public UserAccountController(UserAccountDAO userAccountDAO)
+        public UserAccountController(UserAccountDAO userAccountDAO, ILogger<UserAccountController> logger)
         {
             _userAccountDAO = userAccountDAO; // Initialize UserAccountDAO
+            _logger = logger;  // adding logger to track user account authenication operations
         }
 
         [HttpGet]
@@ -93,12 +96,14 @@ namespace helpharbour.Controllers
 
         // implement the authenticate method
         [HttpPost("authenticate")]
-        public ActionResult<UserAccount> Authenticate([FromBody] UserAccount credentials)
+        public ActionResult<UserAccount> Authenticate([FromBody] UserCredentials credentials)   // CHANGE THE PARAMETER TO UserCredentials and added UserCredentials model
         {
+            _logger.LogInformation("Authenticate method called"); // log the method call
+            
             try
             {
                 var userAccount = _userAccountDAO.Authenticate(credentials.username, credentials.password);  // VERIFY THE USERNAME AND PASSWORD TO BE CORRECT PROPERTIES
-
+                
                 if (userAccount == null)
                 {
                     return Unauthorized("Username or password is incorrect");
