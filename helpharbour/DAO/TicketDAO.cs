@@ -58,5 +58,11 @@ namespace helpharbour.DAO
         {
             ticket_Collection.DeleteOne(ticket => ticket.ticketID == ticketId);
         }
+
+        // method to get all tickets by a user
+        public List<ticket> GetTicketsByUserId(string userId)
+        {
+            return ticket_Collection.Find(ticket => ticket.Requestor == userId).ToList();
+        }
     }
 }

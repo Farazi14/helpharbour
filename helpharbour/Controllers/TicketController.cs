@@ -106,5 +106,21 @@ namespace helpharbour.Controllers
                 return StatusCode(500, "Internal server error"); 
             }
         }
-    }
+
+        // Implementation to get all tickets by a user
+        [HttpGet("user/{userId}")]
+                public ActionResult<List<ticket>> GetTicketsByUserId(string userId)
+        {
+            try
+            {
+                var tickets = _ticketDAO.GetTicketsByUserId(userId);
+                if (tickets == null) return NotFound("No tickets found for the user.");
+                return Ok(tickets);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Internal server error");
+            }
+        }
+            }
 }
