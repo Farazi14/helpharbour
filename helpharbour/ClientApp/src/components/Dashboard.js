@@ -41,8 +41,8 @@ const Dashboard = () => {
     const handleTicketSelect = (ticketId) => {
         // Implement navigation to ticket details page
         console.log("Selected ticket ID:", ticketId);
-        // For example, you could use navigate from `useNavigate` to go to a detailed view
-        // navigate(`api/ticket/${ticketId}`);
+        
+        navigate(`/viewticket/${ticketId}`);
     };
 
     const rowStyle = {
