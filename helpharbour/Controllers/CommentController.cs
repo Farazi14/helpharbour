@@ -93,5 +93,17 @@ namespace helpharbour.Controllers
                 return StatusCode(500, "Internal server error"); // Handle exceptions gracefully
             }
         }
+
+        // Implementation to get all comments for a ticket by ticketID
+        [HttpGet("ticket/{ticketID}")]
+        public ActionResult<List<Comment>> GetCommentsByTicketId(int ticketId)
+        {
+            var comments = _commentDAO.GetCommentsByTicketID(ticketId);
+            if (comments == null || comments.Count == 0)
+            {
+                return NotFound("No comments found for this ticket.");
+            }
+            return comments;
+        }
     }
 }

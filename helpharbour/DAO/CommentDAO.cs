@@ -55,5 +55,12 @@ namespace helpharbour.DAO
             comment_Collection.DeleteOne(comment => comment.commentID == commentID);
         }
 
+        // fetch all comments for a ticket by ticketID
+        public List<Comment> GetCommentsByTicketID(int ticketID)
+        {
+            return comment_Collection.Find<Comment>(comment => comment.ticketID == ticketID).ToList();
+        }
+
+
     }
 }

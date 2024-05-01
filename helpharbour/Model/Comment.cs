@@ -15,12 +15,13 @@ namespace helpharbour.Model
 
         [BsonElement("ticketID")]
         public int ticketID { get; set; }
-
         
 
         [BsonElement("timestamp")]
         public DateTime timestamp { get; set; }
 
-       
+        [BsonElement("userID")]
+        public int userID { get; set; }   //defined userID in comment model as it was missing in the initial setup
+
     }
 }
