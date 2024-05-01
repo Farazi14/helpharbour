@@ -1,6 +1,6 @@
 ﻿import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom'; //  Access route parameters here
-import { Container, Row, Col, ListGroup, ListGroupItem, Form, FormGroup, Label, Input, Button } from 'reactstrap';
+import { Container, Row, Col, ListGroup, ListGroupItem, Form, FormGroup, Table, Input, Button } from 'reactstrap';
 import { useAuth } from '../context/AuthContext'; // Import the useAuth hook from the AuthContext to get the user details
 
 const ViewTicket = () => {
@@ -121,16 +121,33 @@ const ViewTicket = () => {
                 <Col>
                     <h1>Ticket Details</h1>
                     {ticket && (
-                        <div>
-                            <h2>Title</h2>
-                            <p>{ticket.title}</p>
-                            <p>{ticket.description}</p>
-                            <p>Status: {ticket.status}</p>
-                            <p>Urgency: {ticket.urgency}</p>
-                            <p>Assigned to: {assignedUserName || 'Loading...'}</p>
-                        </div>
+                        <Table bordered>
+                            <tbody>
+                                <tr>
+                                    <th>Title</th>
+                                    <td>{ticket.title}</td>
+                                </tr>
+                                <tr>
+                                    <th>Description</th>
+                                    <td>{ticket.description}</td>
+                                </tr>
+                                <tr>
+                                    <th>Status</th>
+                                    <td>{ticket.status}</td>
+                                </tr>
+                                <tr>
+                                    <th>Urgency</th>
+                                    <td>{ticket.urgency}</td>
+                                </tr>
+                                <tr>
+                                    <th>Assigned to</th>
+                                    <td>{assignedUserName || 'Loading...'}</td>
+                                </tr>
+                            </tbody>
+                        </Table>
                     )}
                 </Col>
+                
             </Row>
             {/*Display comments*/}
             <Row>
