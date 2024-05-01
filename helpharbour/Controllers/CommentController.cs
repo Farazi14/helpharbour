@@ -10,9 +10,11 @@ namespace helpharbour.Controllers
     public class CommentController : ControllerBase
     {
         private readonly CommentDAO _commentDAO; // Injected CommentDAO
-        public CommentController(CommentDAO commentDAO)
+        private readonly ILogger<UserAccountController> _logger; // defining logger to track api operations
+        public CommentController(CommentDAO commentDAO, ILogger<UserAccountController> logger)
         {
             _commentDAO = commentDAO; // Initialize CommentDAO
+            _logger = logger; // adding logger in the constructor to api operations
         }
 
 
@@ -55,6 +57,7 @@ namespace helpharbour.Controllers
         {
             try
             {
+                _logger.LogInformation("Adding a new comment method called");
                 var create_Comment = _commentDAO.AddComment(newComment);
                 return Ok(create_Comment); // Return the created comment with HTTP 200 OK
             }

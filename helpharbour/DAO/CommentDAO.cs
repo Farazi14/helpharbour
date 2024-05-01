@@ -9,6 +9,7 @@ namespace helpharbour.DAO
     {
         // declaring the comment collection
         private IMongoCollection<Comment> comment_Collection;
+        
 
         // defining the collection by connecting to the database
         public CommentDAO(MongoDBConnection mongoDbConnection)
@@ -38,6 +39,7 @@ namespace helpharbour.DAO
                               .FirstOrDefault()?.commentID ?? 0;
 
             newcomment.commentID = largestCommentID + 1;
+            newcomment.timestamp = DateTime.Now;
 
             comment_Collection.InsertOne(newcomment);
             return newcomment;
