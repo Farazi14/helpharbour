@@ -116,7 +116,7 @@ const ViewTicket = () => {
 
     return (
         <Container>
-            {/*Display ticket details*/}
+            {/*Display ticket details in a vertical table*/}
             <Row>
                 <Col>
                     <h1>Ticket Details</h1>
