@@ -1,4 +1,4 @@
-import { Counter } from "./components/Counter";
+import CreateTicket  from "./components/CreateTicket";
 import { FetchData } from "./components/FetchData";
 import  Dashboard  from "./components/Dashboard";  // using the Dashboard component after converting to functional component
 import  Login from "./components/Login"; 
@@ -14,8 +14,8 @@ const AppRoutes = [
     element: <Dashboard />
    },
   {
-    path: '/counter',
-    element: <Counter />
+    path: '/createticket',
+    element: <CreateTicket />
   },
   {
     path: '/fetch-data',
