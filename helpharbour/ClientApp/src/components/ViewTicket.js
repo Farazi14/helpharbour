@@ -151,7 +151,7 @@ const ViewTicket = () => {
             </Row>
             {/*Display comments*/}
             <Row>
-                <Col Col className="mt-3">
+                <Col className="mt-3">
                     <h2>Messages</h2>
                     {comments.length > 0 ? (   // Display comments if there are any
                         <ListGroup>
