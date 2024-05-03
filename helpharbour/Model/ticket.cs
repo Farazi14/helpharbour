@@ -18,9 +18,6 @@ namespace helpharbour.Model
         [BsonElement("description")]
         public string description { get; set; }
 
-        [BsonElement("SLA_Expiry")]
-        public string SLA_Expiry { get; set; }
-
         [BsonElement("urgency")]
         public string urgency { get; set; }
 
@@ -34,8 +31,10 @@ namespace helpharbour.Model
         public string assigned { get; set; }
 
         [BsonElement("createdDate")]
-        public string createdDate { get; set; }
-  
+        public DateTime createdDate { get; set; }
+
+        [BsonElement("slA_Expiry")]
+        public DateTime slA_Expiry { get; set; }
 
     }
 }

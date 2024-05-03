@@ -1,5 +1,5 @@
 import React,  { useState }  from 'react';
-import NavMenu from './NavMenu';
+
 import './NavMenu.css';
 import { Container, Row, Col, Form, FormGroup, Label, Input, Button, FormFeedback } from 'reactstrap';
 import { useAuth } from '../context/AuthContext';
@@ -18,6 +18,9 @@ const CreateTicket = () => {
         title: false,
         description: false
     });
+    const { isLoggedIn, user } = useAuth();  // Get the user details from the AuthContext
+
+    
 
     // Implement the isFormValid function to check if the form is valid upon submission using state variables
     const isFormValid = () => {
@@ -63,10 +66,51 @@ const CreateTicket = () => {
         setCharCount(0);
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // API call to submit the form data
-        alert('Form submitted');
+        // Check if the form is valid before submitting
+        if (!isFormValid()) {
+            alert('Please fill all required fields correctly.');
+            return;
+        }
+
+        // Create a ticketData object with the form data
+        const ticketData = {
+            type: type,
+            urgency: urgency,
+            title: title,
+            description: description,
+            Requestor: `${user.userID}`, // Add the username of the logged-in user as the Requestor
+            assigned: "", // Add the assigned field with a default value of "Unassigned"
+            status: "Un-assigned" // Add the status of the newly created ticket
+        };
+        console.log("here ", ticketData);
+        // Implementing the API call to submit the form data
+        try {
+            const response = await fetch('/api/ticket', {  
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    
+                },
+                body: JSON.stringify(ticketData)
+            });
+
+            if (response.ok) {
+                const createdTicket = await response.json();
+                console.log('Ticket created successfully:', createdTicket);
+                
+                handleReset();
+                alert('Ticket submitted successfully!');
+            } else {
+                const errorData = await response.json();
+                alert(`Failed to submit ticket: ${errorData.message}`);
+            }
+        } catch (error) {
+            console.error('Failed to submit ticket:', error);
+            alert('Error submitting ticket. Please try again.');
+        }
+
     };
 
     

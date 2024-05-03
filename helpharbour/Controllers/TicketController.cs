@@ -10,11 +10,13 @@ namespace helpharbour.Controllers
     public class TicketController : ControllerBase
     {
         private readonly TicketDAO _ticketDAO; // Injected TicketDAO
+        private readonly ILogger<UserAccountController> _logger;
 
         // Adjust the constructor to include TicketDAO
-        public TicketController(TicketDAO ticketDAO)
+        public TicketController(TicketDAO ticketDAO, ILogger<UserAccountController> logger)
         {
             _ticketDAO = ticketDAO; // Initialize TicketDAO
+            _logger = logger;  // adding logger to track ticket operations
         }
 
         [HttpGet]
@@ -55,6 +57,9 @@ namespace helpharbour.Controllers
         [HttpPost]
         public ActionResult<ticket> Post([FromBody] ticket newTicket)
         {
+            _logger.LogInformation("Adding a new ticket");
+            _logger.LogInformation("Ticket : " + newTicket);
+
             try
             {
                 var create_Ticket = _ticketDAO.AddTicket(newTicket);

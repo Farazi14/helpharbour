@@ -42,6 +42,11 @@ namespace helpharbour.DAO
             // Increment the ticketID to ensure uniqueness
             newTicket.ticketID = largestTicketID + 1;
 
+            // defing creation date of the ticket
+            newTicket.createdDate = DateTime.Now;
+
+            //defining the SLA expiry date
+            newTicket.slA_Expiry = DateTime.Now.AddDays(2);
             // Insert the new ticket
             ticket_Collection.InsertOne(newTicket);
             return newTicket;
