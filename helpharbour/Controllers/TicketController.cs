@@ -130,5 +130,21 @@ namespace helpharbour.Controllers
                 return StatusCode(500, "Internal server error");
             }
         }
+
+        // Implementation to get all tickets assigned to a user
+        [HttpGet("assigned/{userId}")]
+        public ActionResult<List<ticket>> GetTicketsByAssignee(string userId)
+        {
+            try
+            {
+                var tickets = _ticketDAO.GetTicketsByAssignee(userId);
+                if (tickets == null) return NotFound("No tickets assigned to the user.");
+                return Ok(tickets);
             }
+            catch (Exception)
+            {
+                return StatusCode(500, "Internal server error");
+            }
+        }
+    }
 }

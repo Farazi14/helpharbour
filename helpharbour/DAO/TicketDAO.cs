@@ -79,5 +79,11 @@ namespace helpharbour.DAO
         {
             return ticket_Collection.Find(ticket => ticket.Requestor == userId).ToList();
         }
+
+        //method to get tickets assigned to a user
+        public List<ticket> GetTicketsByAssignee(string userId)
+        {
+            return ticket_Collection.Find(ticket => ticket.assigned == userId).ToList();
+        }
     }
 }
