@@ -2,6 +2,7 @@
 import { useParams } from 'react-router-dom'; //  Access route parameters here
 import { Container, Row, Col, ListGroup, ListGroupItem, Form, FormGroup, Table, Input, Button } from 'reactstrap';
 import { useAuth } from '../context/AuthContext'; // Import the useAuth hook from the AuthContext to get the user details
+import { useNavigate } from 'react-router-dom'; // navigate to login page if not logged in
 
 const ViewTicket = () => {
     const [ticket, setTicket] = useState(null);
@@ -9,10 +10,14 @@ const ViewTicket = () => {
     const [comments, setComments] = useState([]);
     const { ticketId } = useParams();  // Access the ticketId parameter from the URL
     const [message, setMessage] = useState(''); // State to store the message to be posted
-    const { user } = useAuth();  // Get the user details from the AuthContext
+    const { isLoggedIn, user } = useAuth();  // Get the user details from the AuthContext
+    const navigate = useNavigate();
 
 
     useEffect(() => {   // Fetch ticket details and comments when the component renders using useEffect
+        if (!isLoggedIn) {
+            navigate('/'); // Redirect to the home/login page if not logged in
+        }
 
 
         // Fetch the user details for the assigned user
@@ -74,7 +79,7 @@ const ViewTicket = () => {
 
         fetchTicketDetails();
         fetchComments();
-    }, [ticketId]);         
+    }, [ticketId, isLoggedIn, navigate]);         
 
     // Function to handle posting a new comment
     const handlePostMessage = async (event) => {

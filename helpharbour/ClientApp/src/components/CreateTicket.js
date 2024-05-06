@@ -1,5 +1,5 @@
-import React,  { useState }  from 'react';
-
+import React,  { useEffect, useState }  from 'react';
+import { useNavigate } from 'react-router-dom';
 import './NavMenu.css';
 import { Container, Row, Col, Form, FormGroup, Label, Input, Button, FormFeedback } from 'reactstrap';
 import { useAuth } from '../context/AuthContext';
@@ -18,8 +18,15 @@ const CreateTicket = () => {
         title: false,
         description: false
     });
+    const navigate = useNavigate();
     const { isLoggedIn, user } = useAuth();  // Get the user details from the AuthContext
 
+    // login validation
+    useEffect(() => {
+        if (!isLoggedIn) {
+            navigate('/'); // Redirect to the home/login page if not logged in
+        }
+    }, [isLoggedIn, navigate]);
     
 
     // Implement the isFormValid function to check if the form is valid upon submission using state variables

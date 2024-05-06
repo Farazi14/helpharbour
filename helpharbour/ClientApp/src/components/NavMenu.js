@@ -9,7 +9,7 @@ import { useAuth } from '../context/AuthContext'; // import the useAuth hook
 
 const NavMenu = () => {
     const [collapsed, setCollapsed] = useState(true);
-    const { isLoggedIn, setLoggedIn } = useAuth();       // using the useAuth hook
+    const { isLoggedIn, setLoggedIn, user } = useAuth();       // using the useAuth hook
 
     const toggleNavbar = () => {
         setCollapsed(!collapsed);
@@ -19,6 +19,7 @@ const NavMenu = () => {
         setLoggedIn(false);  // Update the logged-in state
         
     };
+    console.log("Navigation Bar User: ", user )
 
      // Navbar implementation with the use of the useAuth hook
     return (
@@ -33,6 +34,13 @@ const NavMenu = () => {
                                 <NavItem>
                                     <NavLink tag={Link} className="text-dark" to="/dashboard">Dashboard</NavLink>
                                 </NavItem>
+
+                                {user && user.role === "Technician" && (
+                                    <NavItem>
+                                        <NavLink tag={Link} className="text-dark" to="/assignedticket">Assigned Tickets</NavLink>
+                                    </NavItem>
+                                )}
+                               
                                 <NavItem>
                                     <NavLink tag={Link} className="text-dark" to="/createticket">Create Ticket</NavLink>
                                 </NavItem>
