@@ -2,7 +2,7 @@ import React,  { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { Table } from 'reactstrap'; // Import the Table component from reactstrap
-import { Container, Row, Col } from 'reactstrap'; 
+import { Container, Row, Col, Button } from 'reactstrap'; 
 
 const Dashboard = () => {
     const [tickets, setTickets] = useState([]);
@@ -49,6 +49,41 @@ const Dashboard = () => {
         border: '1px solid #dee2e6',
         padding: '0.5rem'
     };
+
+    // Implement the handleTicketStatus function
+    const handleTicketStatus = async (ticketID, newStatus) => {
+
+        console.log("Ticket ID:", ticketID, " Status ", newStatus);
+        const response = await fetch(`/api/ticket/${ticketID}/status`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                
+            },
+            body: JSON.stringify({ status: newStatus })
+        });
+
+        console.log(response.status);
+        if (response.ok) {
+            const updatedTicket = await response.json();  // Parse the updated ticket data for frontend rendering
+            // Update the ticket state to reflect the change in the UI
+            setTickets(prevTickets =>
+                prevTickets.map(ticket =>
+                    ticket.ticketID === ticketID ? { ...ticket, status: updatedTicket.status } : ticket  // Update the status of the ticket with the new status
+                )
+            );
+            // Display a success message to the user
+            if (updatedTicket.status === "Close") {
+                alert('Ticket closed successfully');
+            // Implement a success message for reopening a ticket
+            } else if (updatedTicket.status === "Open") {
+                alert('Ticket reopened successfully');
+            }
+        } else {
+            alert(response.status + ' Update failed');
+        }
+    };
+
 
 
     return (
@@ -100,7 +135,17 @@ const Dashboard = () => {
                                         <td>{ticket.status}</td>
                                         <td>{new Date(ticket.createdDate).toLocaleDateString()}</td>
                                         <td>
-                                            <button onClick={() => handleTicketSelect(ticket.ticketID)}>View</button>
+                                            
+                                            <Button color="primary" onClick={() => handleTicketSelect(ticket.ticketID)}>View</Button>
+
+                                            {ticket.status === "Resolved" && (
+                                                <Button className="ml-2" color="danger" onClick={() => handleTicketStatus(ticket.ticketID, "Close")}>Close</Button>
+                                            )}
+
+                                            {ticket.status === "Close" && (
+                                                <Button className="ml-2" color="success" onClick={() => handleTicketStatus(ticket.ticketID, "Open")}>Reopen</Button>
+                                            )}
+                                           
                                         </td>
                                     </tr>
                                 ))}

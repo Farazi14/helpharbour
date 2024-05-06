@@ -71,19 +71,22 @@ namespace helpharbour.Controllers
             }
         }
 
-        // Implementation to update a ticket
-        [HttpPut("{ticketId}")]
-        public ActionResult<ticket> Put(int ticketId, [FromBody] ticket updatedTicket)
+        // Implementation to update a ticket modified to update only the status
+        [HttpPut("{ticketId}/status")]
+        public ActionResult<ticket> UpdateTicketStatus(int ticketId, [FromBody] TicketStatusUpdate updateStatus)
         {
+            
             try
             {
                 var ticket = _ticketDAO.GetTicketById(ticketId);
                 if (ticket == null)
                 {
-                    return NotFound(); // Return HTTP 404 Not Found if ticket is not found
+                    return NotFound();
                 }
-                updatedTicket.ticketID = ticketId;  
-                _ticketDAO.UpdateTicket(ticketId, updatedTicket);
+                //updatedTicket.ticketID = ticketId;  
+
+                ticket.status = updateStatus.status; // Update only the status
+                var updatedTicket = _ticketDAO.UpdateTicket(ticketId, ticket);
                 return Ok(updatedTicket); 
             }
             catch (Exception)
