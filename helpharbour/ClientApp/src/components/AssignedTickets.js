@@ -68,10 +68,11 @@ const AssignedTickets = () => {
                             </tr>
                         </thead>
                         <tbody>
+                             {/*Display the tickets in a table*/}
                             {tickets.length > 0 ? (
                                 tickets.map((ticket) => (
                                     <tr key={ticket.ticketID}>
-                                        <th scope="row">{ticket.ticketID}</th>  // Displaying ticketID
+                                        <th scope="row">{ticket.ticketID}</th>  {/* Displaying ticketID*/}
                                         <td>{ticket.title}</td>
                                         <td>{ticket.type}</td>
                                         <td>{ticket.description}</td>
@@ -85,6 +86,8 @@ const AssignedTickets = () => {
                                     </tr>
                                 ))
                             ) : (
+
+                                /* Display a message if there are no tickets*/
                                 <tr>
                                     <td colSpan="9" className="text-center">No tickets found</td>
                                 </tr>

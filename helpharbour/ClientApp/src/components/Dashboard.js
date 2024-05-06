@@ -124,6 +124,7 @@ const Dashboard = () => {
                                 </tr>
                             </thead>
                             <tbody>
+                                {/*Display the tickets in a table if there are any tickets*/}
                                 {tickets.length > 0 ? (  
                                     tickets.map((ticket, index) => (
                                     <tr key={ticket.ticketID}>
@@ -151,7 +152,8 @@ const Dashboard = () => {
                                     </tr>
                                 ))
                                 ) : (
-<tr>
+                                        /* Display a message if there are no tickets*/
+                                    <tr>                                    
                                         <td colSpan="9" className="text-center">No tickets found</td>
                                     </tr>
                                 )
