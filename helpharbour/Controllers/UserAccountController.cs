@@ -117,7 +117,20 @@ namespace helpharbour.Controllers
             }
         }
 
-
+        //Implemetation to get all admins
+        [HttpGet("admins")]
+        public ActionResult<IEnumerable<UserAccount>> GetAdmins()
+        {
+            try
+            {
+                var admins = _userAccountDAO.GetAdmins();
+                return Ok(admins); // Return the admins with HTTP 200 OK
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Internal server error"); // Handle exceptions gracefully
+            }
+        }
 
     }
 }

@@ -72,5 +72,11 @@ namespace helpharbour.DAO
            
             return userAccount;
         }
+
+        // method to get all admins
+        public List<UserAccount> GetAdmins()
+        {
+            return userAccount_Collection.Find(userAccount => userAccount.role == "administrator").ToList();
+        }
     }
 }

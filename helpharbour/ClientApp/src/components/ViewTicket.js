@@ -1,6 +1,6 @@
 ﻿import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom'; //  Access route parameters here
-import { Container, Row, Col, ListGroup, ListGroupItem, Form, FormGroup, Table, Input, Button } from 'reactstrap';
+import { Container, Row, Col, ListGroup, ListGroupItem, Form, FormGroup, Table, Input, Button, Label } from 'reactstrap';
 import { useAuth } from '../context/AuthContext'; // Import the useAuth hook from the AuthContext to get the user details
 import { useNavigate } from 'react-router-dom'; // navigate to login page if not logged in
 
@@ -12,6 +12,8 @@ const ViewTicket = () => {
     const [message, setMessage] = useState(''); // State to store the message to be posted
     const { isLoggedIn, user } = useAuth();  // Get the user details from the AuthContext
     const navigate = useNavigate();
+    const [selectedAdmin, setSelectedAdmin] = useState(''); // State to store the selected admin for reassignment
+    const [administrators, setAdministrators] = useState([]); // State to store the list of administrators
 
 
     useEffect(() => {   // Fetch ticket details and comments when the component renders using useEffect
@@ -77,6 +79,17 @@ const ViewTicket = () => {
             }
         };
 
+        // Fetch the list of administrators for reassignment
+        const fetchAdministrators = async () => {
+            const response = await fetch('/api/useraccount/admins');
+            if (response.ok) {
+                const admins = await response.json();
+                setAdministrators(admins);
+            }
+        };
+
+
+        fetchAdministrators();
         fetchTicketDetails();
         fetchComments();
     }, [ticketId, isLoggedIn, navigate]);         
@@ -118,6 +131,12 @@ const ViewTicket = () => {
             alert('Failed to post message. Please try again.');
         }
     };
+    // Function to handle reassigning the ticket to a different administrator
+    const handleReassign = async () => {
+        // Assuming API endpoint to reassign the ticket
+        console.log(`Reassigning to ${selectedAdmin}`);
+        // Implement the fetch request to reassign the ticket here
+    };
 
     return (
         <Container>
@@ -148,6 +167,32 @@ const ViewTicket = () => {
                                     <th>Assigned to</th>
                                     <td>{assignedUserName || 'Loading...'}</td>
                                 </tr>
+                                {user && user.role === 'Technician' && (
+                                    <tr>
+                                        <th>Reassign</th>
+                                        <td>
+                                           {/* Display dropdown to select an administrator for ticket reassignment*/}
+                                            <Form inline>
+                                                <FormGroup>
+                                                    <Label for="adminSelect" hidden>Select Admin</Label>
+                                                    <Input type="select" name="admin" id="adminSelect" onChange={e => setSelectedAdmin(e.target.value)}>  {/*Select an administrator from the dropdown and once onchange event is triggered, the selected admin will be set in the state*/}
+                                                        <option value="">Select an Administrator</option>
+
+                                                        {/*Display the list of administrators in the dropdown using map function*/}
+                                                        {administrators.map(admin => (
+                                                            <option key={admin.id} value={admin.id}>{admin.username}</option>
+                                                        ))}
+                                                    </Input>
+                                                </FormGroup>
+                                                {/*Display the reassign button only if an admin is selected*/}
+                                                {selectedAdmin && (  
+                                                    <Button color="primary" onClick={handleReassign}>Reassign</Button>
+                                                )}
+                                            </Form>
+                                        </td>
+                                    </tr>
+                                )}
+
                             </tbody>
                         </Table>
                     )}
@@ -173,7 +218,7 @@ const ViewTicket = () => {
                 </Col>
             </Row>
             {/*Post message implementation*/}
-            <Row >
+            <Row>
                 <Col className=" mt-4 " >
                     <h2>Post Message</h2>
                     <Form onSubmit={handlePostMessage}>
