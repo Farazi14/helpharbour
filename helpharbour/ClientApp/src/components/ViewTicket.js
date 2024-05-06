@@ -15,6 +15,8 @@ const ViewTicket = () => {
     const [selectedAdmin, setSelectedAdmin] = useState(''); // State to store the selected admin for reassignment
     const [administrators, setAdministrators] = useState([]); // State to store the list of administrators
 
+    const [isLoading, setIsLoading] = useState(true); // State to track loading state of admin list
+
 
     useEffect(() => {   // Fetch ticket details and comments when the component renders using useEffect
         if (!isLoggedIn) {
@@ -81,11 +83,13 @@ const ViewTicket = () => {
 
         // Fetch the list of administrators for reassignment
         const fetchAdministrators = async () => {
+            setIsLoading(true);  // Set loading state to true before fetching the list of administrators
             const response = await fetch('/api/useraccount/admins');
             if (response.ok) {
                 const admins = await response.json();
                 
                 setAdministrators(admins);
+                setIsLoading(false); // Set loading state to false after fetching the list of administrators
             }
             
         };
@@ -196,14 +200,20 @@ const ViewTicket = () => {
                                             <Form inline>
                                                 <FormGroup>
                                                     <Label for="adminSelect" hidden>Select Admin</Label>
-                                                    <Input type="select" name="admin" id="adminSelect" onChange={e => setSelectedAdmin(e.target.value)}>  {/*Select an administrator from the dropdown and once onchange event is triggered, the selected admin will be set in the state*/}
-                                                        <option value="">Select an Administrator</option>
-
-                                                        {/*Display the list of administrators in the dropdown using map function*/}
-                                                        {administrators.map(admin => (
-                                                            <option key={admin.userID} value={admin.userID}>{admin.username}</option>
-                                                        ))}
-                                                    </Input>
+                                                    {/*Display a loading message while the list of administrators is being fetched*/}
+                                                    {isLoading ? ( 
+                                                        <Input type="select" name="admin" id="adminSelect" disabled>
+                                                            <option>Loading...</option>
+                                                        </Input>
+                                                    ) : (
+                                                            <Input type="select" name="admin" id="adminSelect" onChange={e => setSelectedAdmin(e.target.value)} value={selectedAdmin}> {/*Select an administrator from the dropdown and once onchange event is triggered, the selected admin will be set in the state*/}
+                                                            <option value="">Select an Administrator</option>
+                                                                {/*Display the list of administrators in the dropdown using map function*/}
+                                                                {administrators.map((admin) => (
+                                                                <option key={admin.userID} value={admin.userID}>{admin.username}</option>
+                                                            ))}
+                                                        </Input>
+                                                    )}
                                                 </FormGroup>
                                                 {/*Display the reassign button only if an admin is selected*/}
                                                 {selectedAdmin && (  
