@@ -55,18 +55,32 @@ namespace helpharbour.DAO
         // method to update a ticket changed to update ticket status only and return the updated ticket
         public ticket UpdateTicket(int ticketId, ticket updatedTicket)
         {
-            var filter = Builders<ticket>.Filter.Eq(t => t.ticketID, ticketId); // Filter to find the ticket by ID
-            var update = Builders<ticket>.Update.Set(t => t.status, updatedTicket.status); // Update only the status
+            var filter = Builders<ticket>.Filter.Eq(t => t.ticketID, ticketId);
+            var update = Builders<ticket>.Update;  //defining the update builder
+            // defining the list of updates
+            List<UpdateDefinition<ticket>> updates = new List<UpdateDefinition<ticket>>(); // defining the list of updates
 
+            if (!string.IsNullOrEmpty(updatedTicket.status)) // check if the status is not null, if not null then update the status
+            {
+                updates.Add(update.Set(t => t.status, updatedTicket.status));
+            }
+
+            if (!string.IsNullOrEmpty(updatedTicket.assigned)) // check if the assigned user is not null, if not null then update the assigned user
+            {
+                updates.Add(update.Set(t => t.assigned, updatedTicket.assigned));
+            }
+
+            var combinedUpdate = update.Combine(updates);  // combine the updates so that we can be updated in a single query
             var options = new FindOneAndUpdateOptions<ticket>
             {
-                ReturnDocument = ReturnDocument.After // Return the updated document
+                ReturnDocument = ReturnDocument.After
             };
+                        
+            var result = ticket_Collection.FindOneAndUpdate(filter, combinedUpdate, options); // update the ticket and store the updated ticket in result
 
-            // Perform the update and return the updated document
-            var result = ticket_Collection.FindOneAndUpdate(filter, update, options);
             return result;
         }
+
 
         // method to delete a ticket
         public void DeleteTicket(int ticketId)

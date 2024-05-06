@@ -84,8 +84,10 @@ const ViewTicket = () => {
             const response = await fetch('/api/useraccount/admins');
             if (response.ok) {
                 const admins = await response.json();
+                
                 setAdministrators(admins);
             }
+            
         };
 
 
@@ -133,9 +135,28 @@ const ViewTicket = () => {
     };
     // Function to handle reassigning the ticket to a different administrator
     const handleReassign = async () => {
-        // Assuming API endpoint to reassign the ticket
-        console.log(`Reassigning to ${selectedAdmin}`);
-        // Implement the fetch request to reassign the ticket here
+        console.log(selectedAdmin)
+        try {
+            const response = await fetch(`/api/ticket/${ticket.ticketID}/assign`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    
+                },
+                body: JSON.stringify({ assigned: selectedAdmin })
+            });
+
+            if (response.ok) {
+                alert('Ticket successfully reassigned.');
+                navigate('/assignedticket');
+               
+            } else {
+                alert('Failed to reassign ticket. Please try again.');
+            }
+        } catch (error) {
+            console.error('Error reassigning ticket:', error);
+            alert('An error occurred while trying to reassign the ticket.');
+        }
     };
 
     return (
@@ -180,7 +201,7 @@ const ViewTicket = () => {
 
                                                         {/*Display the list of administrators in the dropdown using map function*/}
                                                         {administrators.map(admin => (
-                                                            <option key={admin.id} value={admin.id}>{admin.username}</option>
+                                                            <option key={admin.userID} value={admin.userID}>{admin.username}</option>
                                                         ))}
                                                     </Input>
                                                 </FormGroup>

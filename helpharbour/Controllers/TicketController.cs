@@ -146,5 +146,35 @@ namespace helpharbour.Controllers
                 return StatusCode(500, "Internal server error");
             }
         }
+
+        //implementation to update the assigned user of a ticket
+        [HttpPut("{ticketId}/assign")]
+        public ActionResult AssignTicket(int ticketId, [FromBody] TicketAssignmentUpdate assignee)
+        {
+            try
+            {
+                var ticket = _ticketDAO.GetTicketById(ticketId);
+                if (ticket == null)
+                {
+                    return NotFound("Ticket not found.");
+                }
+
+                ticket.assigned = assignee.Assigned;
+                _ticketDAO.UpdateTicket(ticketId, ticket);
+
+                return Ok(ticket);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to reassign ticket.");
+                return StatusCode(500, "Internal server error");
+            }
+
+
+        }
+
+
+
+
     }
 }
