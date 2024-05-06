@@ -68,7 +68,7 @@ const AssignedTickets = () => {
                             </tr>
                         </thead>
                         <tbody>
-                             {/*Display the tickets in a table*/}
+                             {/*Display the tickets in a table if there are any tickets*/}
                             {tickets.length > 0 ? (
                                 tickets.map((ticket) => (
                                     <tr key={ticket.ticketID}>
