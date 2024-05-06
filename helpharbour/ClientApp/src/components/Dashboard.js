@@ -124,7 +124,8 @@ const Dashboard = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {tickets.map((ticket, index) => (
+                                {tickets.length > 0 ? (  
+                                    tickets.map((ticket, index) => (
                                     <tr key={ticket.ticketID}>
                                         <th scope="row">{index + 1}</th>
                                         <td>{ticket.title}</td>
@@ -148,7 +149,13 @@ const Dashboard = () => {
                                            
                                         </td>
                                     </tr>
-                                ))}
+                                ))
+                                ) : (
+<tr>
+                                        <td colSpan="9" className="text-center">No tickets found</td>
+                                    </tr>
+                                )
+                                }
                             </tbody>
                         </Table>
                     </Col>
