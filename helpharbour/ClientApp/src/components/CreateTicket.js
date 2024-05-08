@@ -109,6 +109,7 @@ const CreateTicket = () => {
                 
                 handleReset();
                 alert('Ticket submitted successfully!');
+                navigate('/dashboard');  // Redirect to the dashboard after successful ticket submission)
             } else {
                 const errorData = await response.json();
                 alert(`Failed to submit ticket: ${errorData.message}`);
