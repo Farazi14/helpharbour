@@ -101,7 +101,7 @@ const ViewTicket = () => {
     }, [ticketId, isLoggedIn, navigate]);         
 
     // Function to handle posting a new comment
-    const handlePostMessage = async (event) => {
+    const handlePostMessage = async (event, action = 'resolve' ) => {
         event.preventDefault();  // Prevent the form from causing a page reload
         if (message.trim() === '') {     // Validate the message
             alert('Message cannot be empty.');
@@ -133,9 +133,28 @@ const ViewTicket = () => {
 
             setComments([...comments, newCommentWithAuthor]);  // Update comments list with the new comment
             setMessage('');  // Clear the input after posting
+
         } else {
             alert('Failed to post message. Please try again.');
         }
+
+        //here check if the resolve button is clicked, to make another api call to update the status of the ticket and then navigate to the assigned ticket page
+        if (action === 'resolve') {
+            // API call to resolve the ticket
+            const resolveResponse = await fetch(`/api/ticket/${ticketId}/status`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ status: 'Resolved' })  // Update the status to 'Resolved'
+            });
+
+            if (resolveResponse.ok) {
+                alert('Ticket resolved successfully.');
+                navigate('/assignedticket');  // Redirects to assigned tickets page
+            } else {
+                alert('Failed to resolve ticket. Please try again.');
+            }
+        }
+
     };
     // Function to handle reassigning the ticket to a different administrator
     const handleReassign = async () => {
@@ -192,7 +211,7 @@ const ViewTicket = () => {
                                     <th>Assigned to</th>
                                     <td>{assignedUserName || 'Loading...'}</td>
                                 </tr>
-                                {user && user.role === 'Technician' && (
+                                {user && user.role === 'Technician' && ticket && ticket.status !== 'Resolved' && (
                                     <tr>
                                         <th>Reassign</th>
                                         <td>
@@ -249,6 +268,8 @@ const ViewTicket = () => {
                 </Col>
             </Row>
             {/*Post message implementation*/}
+             {/*Display the post button only if the ticket is not resolved*/}
+            {ticket && ticket.status !== 'Resolved' && ( 
             <Row>
                 <Col className=" mt-4 " >
                     <h2>Post Message</h2>
@@ -263,13 +284,22 @@ const ViewTicket = () => {
                                 placeholder="Please write your message here..."
                             />
                         </FormGroup>
+
+                        
                         <div className="text-end">  {/* This will align the button to the right */}
-                            <Button type="submit" color="primary">Post</Button>
-                        </div>
+                            <Button style={{ marginRight: '1em' }}  type="submit" color="primary">Post</Button>
+
+                            {/*Resolved button implementation*/}
+                            {user && user.role === "Technician" && (
+                                <Button type="button" onClick={(e) => handlePostMessage(e, 'resolve')} color="success">Resolve</Button> 
+                            )}
+                            </div>
+                        
                     </Form>
                       
                 </Col>
-            </Row>
+                </Row>
+            )}
         </Container>
     );
 };
