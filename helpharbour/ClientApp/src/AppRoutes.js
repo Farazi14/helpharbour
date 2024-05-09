@@ -4,24 +4,35 @@ import  Dashboard  from "./components/Dashboard";  // using the Dashboard compon
 import  Login from "./components/Login"; 
 import  ViewTicket  from "./components/ViewTicket"; // Importing ViewTicket component
 import AssignedTickets from "./components/AssignedTickets";
+import UnassignedTickets from "./components/UnassignedTickets"; // Importing UnassignedTickets component
 
 const AppRoutes = [
-  {
+    // Define the routes for the login page
+    {
     index: true,
     element: <Login />
-   },
+    },
+   // Define the routes for the dashboard page
    {
     path: '/dashboard',
     element: <Dashboard />
     },
+    // Define the routes for the assigned  tickets
     {
         path: '/assignedticket',
         element: <AssignedTickets />
     },
+    //  Define the routes for the unassigned tickets
+    {
+        path: '/unassignedticket',
+        element: <UnassignedTickets />
+    },
+    // Define the routes for the create ticket page
     {
     path: '/createticket',
     element: <CreateTicket />
     },
+    // Define the routes for the fetch data page
     {
     path: '/fetch-data',
     element: <FetchData />
