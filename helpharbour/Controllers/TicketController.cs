@@ -186,8 +186,27 @@ namespace helpharbour.Controllers
                 }
                 return Ok(statuses);
             }
-            catch (Exception ex) // catch the exception if any            {
+            catch (Exception ex) { // catch the exception if any            
                 
+                return StatusCode(500, "Internal server error");
+            }
+        }
+        
+        //implementation to get tickets by status
+        [HttpGet("bystatus/{status}")]
+        public ActionResult<IEnumerable<ticket>> GetTicketsByStatus(string status)
+        {
+            try
+            {
+                var tickets = _ticketDAO.GetTicketsByStatus(status);
+                if (tickets == null || !tickets.Any())
+                    return NotFound("No tickets found with the specified status.");
+
+                return Ok(tickets);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to fetch tickets by status.");
                 return StatusCode(500, "Internal server error");
             }
         }
