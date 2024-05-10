@@ -4,7 +4,7 @@ import  Dashboard  from "./components/Dashboard";  // using the Dashboard compon
 import  Login from "./components/Login"; 
 import  ViewTicket  from "./components/ViewTicket"; // Importing ViewTicket component
 import AssignedTickets from "./components/AssignedTickets";
-import UnassignedTickets from "./components/UnassignedTickets"; // Importing UnassignedTickets component
+import AllTickets from "./components/AllTickets"; // Importing UnassignedTickets component
 
 const AppRoutes = [
     // Define the routes for the login page
@@ -24,8 +24,8 @@ const AppRoutes = [
     },
     //  Define the routes for the unassigned tickets
     {
-        path: '/unassignedticket',
-        element: <UnassignedTickets />
+        path: '/allticket',
+        element: <AllTickets />
     },
     // Define the routes for the create ticket page
     {

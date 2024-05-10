@@ -38,7 +38,7 @@ const NavMenu = () => {
                                 {/*conditionally render the Un-assigned Tickets link based on the user role*/}
                                 {user && user.role === "administrator" && (
                                     <NavItem>
-                                        <NavLink tag={Link} className="text-dark" to="/unassignedticket">Unassigned Tickets</NavLink>
+                                        <NavLink tag={Link} className="text-dark" to="/allticket">All Tickets</NavLink>
                                     </NavItem>
                                 )}
 

@@ -4,16 +4,16 @@ import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
 
-const UnassignedTickets = () => {
+const AllTickets = () => {
 
 
 
     return(
-        <h1>This is test</h1>
+        <h1>All Tickets</h1>
 
 
 
     );
 }
 
-export default UnassignedTickets;
+export default AllTickets;
