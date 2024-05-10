@@ -14,6 +14,8 @@ const ViewTicket = () => {
     const navigate = useNavigate();
     const [selectedAdmin, setSelectedAdmin] = useState(''); // State to store the selected admin for reassignment
     const [administrators, setAdministrators] = useState([]); // State to store the list of administrators
+    const [selectedTech, setSelectedTech] = useState('');
+    const [technicians, setTechnicians] = useState([]); // State to store the list of technicians
 
     const [isLoading, setIsLoading] = useState(true); // State to track loading state of admin list
 
@@ -94,7 +96,21 @@ const ViewTicket = () => {
             
         };
 
+        //fetch the list of technicians
+            const fetchTechnicians = async () => {
+            setIsLoading(true);  // Set loading state to true before fetching the list of technicians
+            const response = await fetch('/api/useraccount/technicians');
+            if (response.ok) {
+                const techs = await response.json();
+                
+                setTechnicians(techs);
+                setIsLoading(false); // Set loading state to false after fetching the list of technicians
+            }
+            
+        };
 
+
+        fetchTechnicians();
         fetchAdministrators();
         fetchTicketDetails();
         fetchComments();
@@ -211,8 +227,14 @@ const ViewTicket = () => {
                                 </tr>
                                 <tr>
                                     <th>Assigned to</th>
-                                    <td>{assignedUserName || 'Loading...'}</td>
+                                    {/*if the ticket is not assigned to anyone, display "Not assigned" in the table cell*/}
+                                    {assignedUserName ? (
+                                        <td>{assignedUserName}</td>
+                                    ) : ( <td>Not assigned</td> 
+                                    )}
                                 </tr>
+
+                                {/*handle reassigning the ticket to an administrator, only if the user is a technician and the ticket is not resolved*/}
                                 {user && user.role === 'Technician' && ticket && ticket.status !== 'Resolved' && (
                                     <tr>
                                         <th>Reassign</th>
@@ -239,6 +261,40 @@ const ViewTicket = () => {
                                                 {/*Display the reassign button only if an admin is selected*/}
                                                 {selectedAdmin && (  
                                                     <Button color="primary" onClick={handleReassign}>Reassign</Button>
+                                                )}
+                                            </Form>
+                                        </td>
+                                    </tr>
+                                )}
+
+                                {/*ticket assignment to technician implementation*/}
+                                {user && user.role === 'administrator' && (
+                                    <tr>
+                                        <th>Assign</th>
+                                        <td>
+                                            {/* Display dropdown to select an administrator for ticket reassignment*/}
+                                            <Form inline>
+                                                <FormGroup>
+                                                    <Label for="TechnicianSelect" hidden>Select Technician</Label>
+                                                    {/*Display a loading message while the list of administrators is being fetched*/}
+                                                    {isLoading ? (
+                                                        <Input type="select" name="technician" id="TechnicianSelect" disabled>
+                                                            <option>Loading...</option>
+                                                        </Input>
+                                                    ) : (
+                                                            <Input type="select" name="technician" id="TechnicianSelect" onChange={e => setSelectedTech(e.target.value)} value={selectedAdmin}> {/*Select an administrator from the dropdown and once onchange event is triggered, the selected admin will be set in the state*/}
+                                                            <option value="">Select a Technician</option>
+                                                            {/*Display the list of technicians in the dropdown using map function*/}
+                                                            {technicians.map((tech) => (
+                                                                <option key={tech.userID} value={tech.userID}>{tech.username}</option>
+                                                            ))}
+                                                        </Input>
+                                                    )}
+                                                </FormGroup>
+                                                {/*Display the reassign button only if an technician is selected*/}
+                                                {selectedTech && (
+                                                    /*Reusing handleReassign function to assign the ticket to the selected technician*/
+                                                    <Button color="primary" onClick={handleReassign}>Assign</Button>
                                                 )}
                                             </Form>
                                         </td>
