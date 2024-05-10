@@ -25,8 +25,8 @@ const AllTickets = () => {
 
             if (response.ok) {
                 const statuses = await response.json();   // Get the statuses from the response
-                const uniqueStatuses = Array.from(new Set(statuses)); // Remove duplicates
-                setStatuses(uniqueStatuses); // Set unique statuses
+                
+                setStatuses(statuses); // Set unique statuses
             } else {
                 alert('Failed to fetch ticket status.');
             }           
