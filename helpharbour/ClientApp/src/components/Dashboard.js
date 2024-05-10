@@ -106,9 +106,9 @@ const Dashboard = () => {
 
 
 
-                <Row  >
-                    <Col >
-                        <h2 >Ticket Table</h2>
+                <Row>
+                    <Col>
+                        <h2>My Tickets</h2>
                         <Table striped>
                             <thead>
                                 <tr>
@@ -126,9 +126,9 @@ const Dashboard = () => {
                             <tbody>
                                 {/*Display the tickets in a table if there are any tickets*/}
                                 {tickets.length > 0 ? (  
-                                    tickets.map((ticket, index) => (
-                                    <tr key={ticket.ticketID}>
-                                        <th scope="row">{index + 1}</th>
+                                    tickets.map((ticket) => (
+                                        <tr key={ticket.ticketID}>
+                                            <th scope="row">{ticket.ticketID}</th>
                                         <td>{ticket.title}</td>
                                         <td>{ticket.type}</td>
                                         <td>{ticket.description}</td>
