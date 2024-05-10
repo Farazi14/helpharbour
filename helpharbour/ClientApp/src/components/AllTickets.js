@@ -37,11 +37,12 @@ const AllTickets = () => {
 
 
     const handleStatusChange = async (event) => {
-        const selectedStatus = event.target.value;
+        const selectedStatus = event.target.value; // Get the selected status from the dropdown menu
         setSelectedStatus(selectedStatus); // Update the selected status state
 
         if (selectedStatus) {
             try {
+                //API call to get the tickets by status
                 const response = await fetch(`/api/ticket/bystatus/${selectedStatus}`, {
                     method: 'GET',
                     headers: {
@@ -51,7 +52,7 @@ const AllTickets = () => {
 
                 if (response.ok) {
                     const data = await response.json();
-                    setTickets(data); // Assuming the response contains an array of tickets
+                    setTickets(data); 
                 } else {
                     console.error("Failed to fetch tickets by status");
                     alert("Failed to fetch tickets by status.");

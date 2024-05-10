@@ -112,7 +112,7 @@ namespace helpharbour.DAO
         //get all tickets by status
         public List<ticket> GetTicketsByStatus(string status)
         {
-            return ticket_Collection.Find(ticket => ticket.status == status).ToList();
+            return ticket_Collection.Find(ticket => ticket.status == status).ToList(); // get all the tickets with the given status
         }
     }
 }

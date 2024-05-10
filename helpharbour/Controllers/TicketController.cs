@@ -198,7 +198,7 @@ namespace helpharbour.Controllers
         {
             try
             {
-                var tickets = _ticketDAO.GetTicketsByStatus(status);
+                var tickets = _ticketDAO.GetTicketsByStatus(status); // calling GetTicketsByStatus method from DAO and passing the status
                 if (tickets == null || !tickets.Any())
                     return NotFound("No tickets found with the specified status.");
 
