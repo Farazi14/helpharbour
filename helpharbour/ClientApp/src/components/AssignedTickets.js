@@ -32,6 +32,7 @@ const AssignedTickets = () => {
 
             if (response.ok) {
                 const data = await response.json();
+                
                 setTickets(data);
             } else {
                 alert("Failed to fetch tickets");
@@ -71,6 +72,8 @@ const AssignedTickets = () => {
                              {/*Display the tickets in a table if there are any tickets*/}
                             {tickets.length > 0 ? (
                                 tickets.map((ticket) => (
+                                    // Display the ticket details in a table row except for resolved tickets
+                                    ticket.status !== "Resolved" ? ( 
                                     <tr key={ticket.ticketID}>
                                         <th scope="row">{ticket.ticketID}</th>  {/* Displaying ticketID*/}
                                         <td>{ticket.title}</td>
@@ -83,7 +86,7 @@ const AssignedTickets = () => {
                                         <td>
                                             <Button color="primary" onClick={() => navigate(`/viewticket/${ticket.ticketID}`)}>View</Button>
                                         </td>
-                                    </tr>
+                                    </tr>) : null
                                 ))
                             ) : (
 
