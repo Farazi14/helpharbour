@@ -75,11 +75,35 @@ const AllTickets = () => {
         navigate(`/viewticket/${ticketId}`);
     };
 
+    const handleDeleteTicket = async (ticketId) => {
+        // Implement the delete ticket functionality
+        // API call to delete the ticket
+        try {
+            const response = await fetch(`/api/ticket/${ticketId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+
+            if (response.ok) {
+                alert('Ticket deleted successfully.'); // Display success message
+                const updatedTickets = tickets.filter(ticket => ticket.ticketID !== ticketId); // Filter out the deleted ticket
+                setTickets(updatedTickets); // Update the tickets state
+            } else {
+                alert('Failed to delete ticket.');
+            }
+        } catch (error) {
+            console.error('Failed to delete ticket:', error);
+            alert('Failed to delete ticket. Please try again.');
+        }
+    }
+
     return (
         <Container>
             <Row>
                 <Col>
-                    <p>Please use the following dropdown menu to view the ticket by status:</p>
+                    <strong><p>Please use the following dropdown menu to view the ticket by status:</p></strong>
                     <Form>
                         <FormGroup> {/* Implementing the form group for the status filter so that the user can select the status*/}
                             <Label for="statusFilter">Filter by Status:</Label>
@@ -128,6 +152,10 @@ const AllTickets = () => {
                                         <td>
 
                                             <Button color="primary" onClick={() => handleTicketSelect(ticket.ticketID)}>View</Button>
+                                             {/*Display delete button for unassigned ticket as they may not be a valid ticket*/}
+                                             {ticket.status === "Unassigned" && (
+                                                <Button color="danger" onClick={() => handleDeleteTicket(ticket.ticketID)} >Delete</Button>
+                                            )}
 
                                         </td>
                                     </tr>
