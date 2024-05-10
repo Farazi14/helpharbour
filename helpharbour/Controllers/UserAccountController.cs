@@ -132,5 +132,19 @@ namespace helpharbour.Controllers
             }
         }
 
+        //Implementation to get all technicians
+        [HttpGet("technicians")]
+        public ActionResult<IEnumerable<UserAccount>> GetTechnicians()
+        {
+            try
+            {
+                var technicians = _userAccountDAO.GetTechnicians();
+                return Ok(technicians); // Return the technicians with HTTP 200 OK
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Internal server error"); // Handle exceptions gracefully
+            }
+        }
     }
 }

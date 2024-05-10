@@ -78,5 +78,11 @@ namespace helpharbour.DAO
         {
             return userAccount_Collection.Find(userAccount => userAccount.role == "administrator").ToList();
         }
+
+        // method to get technicians
+        public List<UserAccount> GetTechnicians()
+        {
+            return userAccount_Collection.Find(userAccount => userAccount.role == "Technician").ToList();
+        }
     }
 }
