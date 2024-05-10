@@ -169,8 +169,27 @@ namespace helpharbour.Controllers
                 _logger.LogError(ex, "Failed to reassign ticket.");
                 return StatusCode(500, "Internal server error");
             }
+        }
 
+        //implementation to get all statuses
+        [HttpGet("allstatus")]
+        public ActionResult<IEnumerable<string>> GetAllStatuses()
+        {
 
+            _logger.LogInformation("GetAllStatuses method is called");
+            try
+            {
+                var statuses = _ticketDAO.GetAllStatuses(); // calling Get all statuses method from DAO
+                if (statuses == null || !statuses.Any())  // check if the statuses are null or empty
+                {
+                    return NotFound("No statuses found.");
+                }
+                return Ok(statuses);
+            }
+            catch (Exception ex) // catch the exception if any            {
+                
+                return StatusCode(500, "Internal server error");
+            }
         }
 
 

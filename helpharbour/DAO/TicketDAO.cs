@@ -99,5 +99,15 @@ namespace helpharbour.DAO
         {
             return ticket_Collection.Find(ticket => ticket.assigned == userId).ToList();
         }
+
+        //get statuses of tickets
+        public List<string> GetAllStatuses()
+        {
+            return ticket_Collection.AsQueryable()     // get all the tickets using AsQueryable function
+                                    .Select(ticket => ticket.status)  // select the status of each ticket
+                                    .Distinct()  // get the distinct statuses to remove duplicates
+                                    .ToList();  // return the list of statuses
+        }
+
     }
 }
