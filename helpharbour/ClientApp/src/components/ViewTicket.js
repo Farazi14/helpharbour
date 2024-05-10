@@ -101,12 +101,14 @@ const ViewTicket = () => {
     }, [ticketId, isLoggedIn, navigate]);         
 
     // Function to handle posting a new comment
-    const handlePostMessage = async (event, action = 'resolve' ) => {
+    const handlePostMessage = async (event, action) => {
         event.preventDefault();  // Prevent the form from causing a page reload
         if (message.trim() === '') {     // Validate the message
             alert('Message cannot be empty.');
             return;
         }
+
+        console.log("here: ", action)
 
         // API call to post the new comment
         const response = await fetch(`/api/comment/`, {
