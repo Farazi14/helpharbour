@@ -164,12 +164,14 @@ const Dashboard = () => {
                     </Col>
                 </Row>
                 {/* Display the AssignedTickets component */}
+
+                {user.role !== "User" && (
                 <Row>
                     <Col>
                            <AssignedTickets /> 
                     </Col>
                 </Row>
-
+                )}
 
             </Container>
         </div>

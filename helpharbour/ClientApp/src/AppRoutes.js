@@ -18,10 +18,10 @@ const AppRoutes = [
     element: <Dashboard />
     },
     // Define the routes for the assigned  tickets
-    {
-        path: '/assignedticket',
-        element: <AssignedTickets />
-    },
+    //{
+    //    path: '/assignedticket',
+    //    element: <AssignedTickets />
+    //},
     //  Define the routes for the unassigned tickets
     {
         path: '/allticket',
