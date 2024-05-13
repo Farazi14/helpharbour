@@ -291,7 +291,7 @@ const ViewTicket = () => {
                                                             <option>Loading...</option>
                                                         </Input>
                                                     ) : (
-                                                            <Input type="select" name="technician" id="TechnicianSelect" onChange={e => setSelectedTech(e.target.value)} value={selectedAdmin}> {/*Select an administrator from the dropdown and once onchange event is triggered, the selected admin will be set in the state*/}
+                                                            <Input type="select" name="technician" id="TechnicianSelect" onChange={e => setSelectedTech(e.target.value)} value={selectedTech}> {/*Select a technician from the dropdown and once onchange event is triggered, the selected tech will be set in the state*/}
                                                             <option value="">Select a Technician</option>
                                                             {/*Display the list of technicians in the dropdown using map function*/}
                                                             {technicians.map((tech) => (
