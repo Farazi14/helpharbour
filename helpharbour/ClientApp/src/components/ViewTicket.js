@@ -167,7 +167,7 @@ const ViewTicket = () => {
 
             if (resolveResponse.ok) {
                 alert('Ticket resolved successfully.');
-                navigate('/assignedticket');  // Redirects to assigned tickets page
+                navigate('/dashboard');  // Redirects to the dashboard
             } else {
                 alert('Failed to resolve ticket. Please try again.');
             }
@@ -193,7 +193,7 @@ const ViewTicket = () => {
             if (response.ok) {
                 if (user.role === 'Technician') { 
                 alert('Ticket successfully reassigned.');
-                    navigate('/assignedticket');
+                    navigate('/dashboard');
                 }
                 if (user.role === 'administrator') {
                     alert('Ticket successfully assigned.');

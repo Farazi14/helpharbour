@@ -89,7 +89,7 @@ const CreateTicket = () => {
             description: description,
             Requestor: `${user.userID}`, // Add the username of the logged-in user as the Requestor
             assigned: "", // Add the assigned field with a default value of "Unassigned"
-            status: "Un-assigned" // Add the status of the newly created ticket
+            status: "Unassigned" // Add the status of the newly created ticket
         };
         console.log("here ", ticketData);
         // Implementing the API call to submit the form data
