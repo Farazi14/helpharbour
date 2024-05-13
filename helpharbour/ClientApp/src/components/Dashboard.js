@@ -2,7 +2,8 @@ import React,  { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { Table } from 'reactstrap'; // Import the Table component from reactstrap
-import { Container, Row, Col, Button } from 'reactstrap'; 
+import { Container, Row, Col, Button } from 'reactstrap';
+import AssignedTickets from './AssignedTickets';  // Importing  AssignedTickets component
 
 const Dashboard = () => {
     const [tickets, setTickets] = useState([]);
@@ -162,6 +163,14 @@ const Dashboard = () => {
                         </Table>
                     </Col>
                 </Row>
+                {/* Display the AssignedTickets component */}
+                <Row>
+                    <Col>
+                           <AssignedTickets /> 
+                    </Col>
+                </Row>
+
+
             </Container>
         </div>
     );

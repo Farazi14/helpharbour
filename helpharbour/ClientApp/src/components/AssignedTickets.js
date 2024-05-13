@@ -10,6 +10,7 @@ const AssignedTickets = () => {
     const navigate = useNavigate();
     const { isLoggedIn, user } = useAuth();
     const [tickets, setTickets] = useState([]);
+    const [showTickets, setShowTickets] = useState(false); // Define the state variable to show or hide the tickets in a toggle manner
 
     useEffect(() => {
         // Redirect to the login page if the user is not logged in
@@ -42,16 +43,23 @@ const AssignedTickets = () => {
             alert("An error occurred while fetching tickets.");
         }
     };
+
+    // Implement the toggleTickets function to show or hide the tickets
+    const toggleTickets = () => {  
+        setShowTickets(!showTickets);  // Toggle the showTickets state by default it is false meaning hidden
+    };
   
 
     return (
         <Container>
+            
             <Row>
                 <Col>
-                    <h2>Assigned Tickets</h2>
+                    {/* Display the assigned tickets with a toggle behaviour*/}
+                    <h2>Assigned Tickets <span style={{ cursor: "pointer", fontSize: '1rem', userSelect: 'none' }} onClick={toggleTickets}>[{showTickets ? 'hide' : 'show'}]</span></h2>  
                 </Col>
             </Row>
-
+            {showTickets && (
             <Row>
                 <Col>
                     <Table striped>
@@ -100,6 +108,7 @@ const AssignedTickets = () => {
 
                 </Col>
             </Row>
+            )}
 
         </Container>
     );
