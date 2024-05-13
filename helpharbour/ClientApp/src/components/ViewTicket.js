@@ -176,7 +176,7 @@ const ViewTicket = () => {
     };
     // Function to handle reassigning the ticket to a different administrator
     const handleReassign = async () => {
-        console.log(selectedAdmin)
+        console.log(selectedTech || selectedAdmin )
         try {
             const response = await fetch(`/api/ticket/${ticket.ticketID}/assign`, {
                 method: 'PUT',
@@ -184,12 +184,21 @@ const ViewTicket = () => {
                     'Content-Type': 'application/json',
                     
                 },
-                body: JSON.stringify({ assigned: selectedAdmin })
+                body: JSON.stringify({
+                    assigned: selectedAdmin || selectedTech, // send the selected admin or technician ID in the request body because both form inputs are calling the same function
+                    status: "Assigned"    // As soon as the ticket is assigned or reassigned, the status would change to assigned so that the assignee would know that they have been assigned a ticket 
+                }) 
             });
 
             if (response.ok) {
+                if (user.role === 'Technician') { 
                 alert('Ticket successfully reassigned.');
-                navigate('/assignedticket');
+                    navigate('/assignedticket');
+                }
+                if (user.role === 'administrator') {
+                    alert('Ticket successfully assigned.');
+                    navigate('/allticket');
+                }
                
             } else {
                 alert('Failed to reassign ticket. Please try again.');

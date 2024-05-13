@@ -151,6 +151,7 @@ namespace helpharbour.Controllers
         [HttpPut("{ticketId}/assign")]
         public ActionResult AssignTicket(int ticketId, [FromBody] TicketAssignmentUpdate assignee)
         {
+            _logger.LogInformation($"AssignTicket method is called with assignee: {assignee.Assigned}, {assignee.status} "); // printing the assignee and status values on the console
             try
             {
                 var ticket = _ticketDAO.GetTicketById(ticketId);
@@ -160,6 +161,8 @@ namespace helpharbour.Controllers
                 }
 
                 ticket.assigned = assignee.Assigned;
+                ticket.status = assignee.status;        // Update the status
+                
                 _ticketDAO.UpdateTicket(ticketId, ticket);
 
                 return Ok(ticket);

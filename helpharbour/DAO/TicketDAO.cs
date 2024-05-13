@@ -65,9 +65,10 @@ namespace helpharbour.DAO
                 updates.Add(update.Set(t => t.status, updatedTicket.status));
             }
 
-            if (!string.IsNullOrEmpty(updatedTicket.assigned)) // check if the assigned user is not null, if not null then update the assigned user
+            if (!string.IsNullOrEmpty(updatedTicket.assigned) && !string.IsNullOrEmpty(updatedTicket.status)) // check if the assigned user and assigned status are not null , if not null then update the records
             {
                 updates.Add(update.Set(t => t.assigned, updatedTicket.assigned));
+                updates.Add(update.Set(t => t.status, updatedTicket.status));
             }
 
             var combinedUpdate = update.Combine(updates);  // combine the updates so that we can be updated in a single query
