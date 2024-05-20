@@ -13,7 +13,7 @@ const FAQ = () => {
     const [content, setContent] = useState('');
     const navigate = useNavigate();
 
-    useEffect(() => {
+     useEffect(() => {
         if (!isLoggedIn) {
             navigate('/'); // Redirect to the login page if not logged in
             return;
@@ -42,8 +42,31 @@ const FAQ = () => {
 
 
     const handleSubmit = async (event) => {
+        event.preventDefault();
+                 
+        try {
+            const response = await fetch('/api/faq/addfaq', {  // fetch the API to add the FAQ
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ title, content, authorID: user.userID })  // JSON payload to be sent to the server
+            });
 
-        console.log('title: ', title, ' content: ', content);
+            if (response.ok) {
+                const newFaq = await response.json();
+                // implementation to display to newly added FAQ in the list of FAQs so that it is visible to the user without refreshing the page
+                setFaqs([...faqs, { ...newFaq, isOpen: false }]);
+                setTitle('');
+                setContent('');
+                alert('FAQ added successfully!'); // Display the alert message when the FAQ is added successfully
+            } else {
+                alert('Failed to add FAQ');     // Display the alert message when the FAQ is not added successfully
+            }
+        } catch (error) {
+            console.error('Failed to add FAQ:', error);
+            alert('An error occurred while adding the FAQ.'); // Display the alert message when an error occurs while adding the FAQ
+        }
        
     };
 

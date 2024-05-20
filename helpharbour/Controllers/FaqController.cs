@@ -10,14 +10,20 @@ namespace helpharbour.Controllers
     public class FaqController : ControllerBase
     {
         private readonly faqDAO _faqDAO; // Injected FaqDAO
-        public FaqController(faqDAO faqDAO)
+        private readonly ILogger<UserAccountController> _logger;
+
+
+        public FaqController(faqDAO faqDAO, ILogger<UserAccountController> logger)
         {
             _faqDAO = faqDAO; // Initialize FaqDAO
+            _logger = logger;
         }
 
         [HttpGet]
         public ActionResult<IEnumerable<faq>> Get()
         {
+            _logger.LogInformation("Get all faqs");
+
             try
             {
                 var faqs = _faqDAO.GetAllFaqs();
@@ -49,9 +55,10 @@ namespace helpharbour.Controllers
         }
 
         // Implementation to add a faq
-        [HttpPost("{articleID}")]
+        [HttpPost("addfaq")]
         public ActionResult<faq> Post([FromBody] faq newFaq)
         {
+            _logger.LogInformation("Adding a new faq: {AuthorID} ", newFaq.authorID);
             try
             {
                 var create_Faq = _faqDAO.AddFaq(newFaq);
