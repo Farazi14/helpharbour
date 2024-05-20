@@ -70,10 +70,22 @@ const FAQ = () => {
        
     };
 
-    const handleDelete = async (articleID) => {
-        console.log("Delete articleID:", articleID);
-        
-    }
+    const handleDelete = async (faqId) => {
+        try {
+            const response = await fetch(`/api/faq/${faqId}`, { // API endlpoint call to delete the FAQ
+                method: 'DELETE'
+            });
+            if (response.ok) {
+                setFaqs(faqs.filter(faq => faq.articleID !== faqId)); // Filter the FAQ to remove the deleted FAQ
+                alert('FAQ deleted successfully!'); // Display the alert message when the FAQ is deleted successfully
+            } else {
+                alert('Failed to delete FAQ'); // Display the alert message when the FAQ is not deleted successfully
+            }
+        } catch (error) {
+            console.error('Error deleting FAQ:', error);
+            alert('An error occurred while deleting the FAQ.');  // Display the alert message when an error occurs while deleting the FAQ
+        }
+    };
 
     const toggleFaq = index => {
         setFaqs(currentFaqs =>
@@ -90,8 +102,9 @@ const FAQ = () => {
     return (
         <Container>
             {user.role === "administrator" && (
-                <Row>
+                <Row className="mt-3">
                     <Col >
+                        <p><strong>Please fill up the following form to add an FAQ article</strong></p>
                         <Form onSubmit={handleSubmit}> {/*on submit of the form, the handleSubmit function is called*/}
                             <FormGroup>
                                 <Label for="faqTitle">Title</Label>
