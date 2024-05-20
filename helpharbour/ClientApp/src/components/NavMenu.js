@@ -49,7 +49,7 @@ const NavMenu = () => {
                                     <NavLink tag={Link} className="text-dark" to="/createticket">Create Ticket</NavLink>
                                 </NavItem>
                                 <NavItem>
-                                    <NavLink tag={Link} className="text-dark" to="/profile">Profile</NavLink>
+                                    <NavLink tag={Link} className="text-dark" to="/faq">FAQs</NavLink>
                                 </NavItem>
                                 <NavItem>
                                     <NavLink tag={Link} className="text-dark" to="/" onClick={handleLogout}>Logout</NavLink>

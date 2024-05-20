@@ -1,9 +1,8 @@
 import CreateTicket  from "./components/CreateTicket";
-import { FetchData } from "./components/FetchData";
 import  Dashboard  from "./components/Dashboard";  // using the Dashboard component after converting to functional component
 import  Login from "./components/Login"; 
-import  ViewTicket  from "./components/ViewTicket"; // Importing ViewTicket component
-import AssignedTickets from "./components/AssignedTickets";
+import ViewTicket from "./components/ViewTicket"; // Importing ViewTicket component
+import FAQ from "./components/FAQ";
 import AllTickets from "./components/AllTickets"; // Importing UnassignedTickets component
 
 const AppRoutes = [
@@ -30,8 +29,8 @@ const AppRoutes = [
     },
     // Define the routes for the fetch data page
     {
-    path: '/fetch-data',
-    element: <FetchData />
+    path: '/faq',
+        element: <FAQ />
     },
     {
     path: '/viewticket/:ticketId',   // Define a route parameter for the ticket ID

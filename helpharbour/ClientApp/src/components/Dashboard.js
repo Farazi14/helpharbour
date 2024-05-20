@@ -139,14 +139,14 @@ const Dashboard = () => {
                                         <td>{new Date(ticket.createdDate).toLocaleDateString()}</td>
                                         <td>
                                             
-                                            <Button color="primary" onClick={() => handleTicketSelect(ticket.ticketID)}>View</Button>
+                                                <p><Button color="primary" onClick={() => handleTicketSelect(ticket.ticketID)}>View</Button></p>
 
                                             {ticket.status === "Resolved" && (
-                                                <Button className="ml-2" color="danger" onClick={() => handleTicketStatus(ticket.ticketID, "Close")}>Close</Button>
+                                                <Button className="mt-1" color="danger" onClick={() => handleTicketStatus(ticket.ticketID, "Close")}>Close</Button>
                                             )}
 
                                             {ticket.status === "Close" && (
-                                                <Button className="ml-2" color="success" onClick={() => handleTicketStatus(ticket.ticketID, "Open")}>Reopen</Button>
+                                                <Button className="mt-1" color="success" onClick={() => handleTicketStatus(ticket.ticketID, "Open")}>Reopen</Button>
                                             )}
                                            
                                         </td>
