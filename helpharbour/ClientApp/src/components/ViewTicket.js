@@ -357,7 +357,7 @@ const ViewTicket = () => {
                             <Button style={{ marginRight: '1em' }}  type="submit" color="primary">Post</Button>
 
                             {/*Resolved button implementation*/}
-                            {user && user.role === "Technician" && (
+                            {user && user.role !== "User" && (
                                 <Button type="button" onClick={(e) => handlePostMessage(e, 'resolve')} color="success">Resolve</Button> 
                             )}
                             </div>
