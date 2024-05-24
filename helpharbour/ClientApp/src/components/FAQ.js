@@ -1,32 +1,31 @@
-import React, { useState, useEffect  } from 'react';
-import { Container, Row, Col, Button } from 'reactstrap';
-import { useAuth } from '../context/AuthContext';
-import { Form, FormGroup, Label, Input } from 'reactstrap';
-import { useNavigate } from 'react-router-dom'
+import React, { useState, useEffect  } from 'react';                   // Import the useState and useEffect hooks from React
+import { Container, Row, Col, Button } from 'reactstrap';              // Import the Container, Row, Col and Button components from the Reactstrap library
+import { useAuth } from '../context/AuthContext';                      // Import the useAuth hook from the AuthContext
+import { Form, FormGroup, Label, Input } from 'reactstrap';            // Import the Form, FormGroup, Label and Input components from the Reactstrap library
+import { useNavigate } from 'react-router-dom'                         // Import the useNavigate hook from the React Router DOM library
 
 
 const FAQ = () => {
-
-    const [faqs, setFaqs] = useState([]);
-    const { isLoggedIn, user } = useAuth();
-    const [title, setTitle] = useState('');
+    // define the state variables
+    const [faqs, setFaqs]       = useState([]);                        
+    const { isLoggedIn, user }  = useAuth();                           
+    const [title, setTitle]     = useState('');
     const [content, setContent] = useState('');
-    const navigate = useNavigate();
+    const navigate              = useNavigate();
 
      useEffect(() => {
         if (!isLoggedIn) {
-            navigate('/'); // Redirect to the login page if not logged in
+            navigate('/');                                                                       // Redirect to the login page if not logged in
             return;
         }
         
-
         // Implement the Fetchfaqs function to fetch the FAQs to get all the FAQs data
         const fetchFaqs = async () => {
             try {
                 const response = await fetch('/api/faq');
                 if (response.ok) {
                     const data = await response.json();
-                    const formattedFaqs = data.map(faq => ({ ...faq, isOpen: false }));
+                    const formattedFaqs = data.map(faq => ({ ...faq, isOpen: false }));          // Add the isOpen property to each FAQ for toggling the content
                     setFaqs(formattedFaqs);
                 } else {
                     alert('Failed to fetch FAQs');
@@ -37,7 +36,7 @@ const FAQ = () => {
             }
         }
 
-        fetchFaqs(); // Call the Fetchfaqs function
+        fetchFaqs();                                                                             // Call the Fetchfaqs function
     }, []);
 
 
@@ -45,12 +44,12 @@ const FAQ = () => {
         event.preventDefault();
                  
         try {
-            const response = await fetch('/api/faq/addfaq', {  // fetch the API to add the FAQ
+            const response = await fetch('/api/faq/addfaq', {                                   // fetch the API to add the FAQ
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ title, content, authorID: user.userID })  // JSON payload to be sent to the server
+                body: JSON.stringify({ title, content, authorID: user.userID })                // JSON payload to be sent to the server
             });
 
             if (response.ok) {
@@ -59,40 +58,40 @@ const FAQ = () => {
                 setFaqs([...faqs, { ...newFaq, isOpen: false }]);
                 setTitle('');
                 setContent('');
-                alert('FAQ added successfully!'); // Display the alert message when the FAQ is added successfully
+                alert('FAQ added successfully!');               
             } else {
-                alert('Failed to add FAQ');     // Display the alert message when the FAQ is not added successfully
+                alert('Failed to add FAQ');     
             }
         } catch (error) {
             console.error('Failed to add FAQ:', error);
-            alert('An error occurred while adding the FAQ.'); // Display the alert message when an error occurs while adding the FAQ
+            alert('An error occurred while adding the FAQ.'); 
         }
        
     };
 
     const handleDelete = async (faqId) => {
         try {
-            const response = await fetch(`/api/faq/${faqId}`, { // API endlpoint call to delete the FAQ
+            const response = await fetch(`/api/faq/${faqId}`, {                                 // API endlpoint call to delete the FAQ
                 method: 'DELETE'
             });
             if (response.ok) {
-                setFaqs(faqs.filter(faq => faq.articleID !== faqId)); // Filter the FAQ to remove the deleted FAQ
-                alert('FAQ deleted successfully!'); // Display the alert message when the FAQ is deleted successfully
+                setFaqs(faqs.filter(faq => faq.articleID !== faqId));                          // Filter the FAQ to remove the deleted FAQ
+                alert('FAQ deleted successfully!');                                            // Display the alert message when the FAQ is deleted successfully
             } else {
-                alert('Failed to delete FAQ'); // Display the alert message when the FAQ is not deleted successfully
+                alert('Failed to delete FAQ');                                                 // Display the alert message when the FAQ is not deleted successfully
             }
         } catch (error) {
             console.error('Error deleting FAQ:', error);
-            alert('An error occurred while deleting the FAQ.');  // Display the alert message when an error occurs while deleting the FAQ
+            alert('An error occurred while deleting the FAQ.');                                // Display the alert message when an error occurs while deleting the FAQ
         }
     };
 
     const toggleFaq = index => {
         setFaqs(currentFaqs =>
-            currentFaqs.map((faq, i) => {
-                if (i === index) {
+            currentFaqs.map((faq, i) => {                                                     // Map through the FAQs
+                if (i === index) {                                                            // Check if the index matches the FAQ so that the content can be toggled
                     
-                    return { ...faq, isOpen: !faq.isOpen };
+                    return { ...faq, isOpen: !faq.isOpen };                                   // Toggle the isOpen property of the FAQ
                 }
                 return faq;
             })
@@ -105,7 +104,7 @@ const FAQ = () => {
                 <Row className="mt-3">
                     <Col >
                         <p><strong>Please fill up the following form to add an FAQ article</strong></p>
-                        <Form onSubmit={handleSubmit}> {/*on submit of the form, the handleSubmit function is called*/}
+                        <Form onSubmit={handleSubmit}>                                                      {/*on submit of the form, the handleSubmit function is called*/}
                             <FormGroup>
                                 <Label for="faqTitle">Title</Label>
                                 {/* enter the title of the FAQ*/}
@@ -148,9 +147,9 @@ const FAQ = () => {
                                 <span style={{ float: 'right' }}> 
                                     {/*implementation to display the delete button only for the administrator*/}
                                     {user.role === "administrator" && (
-                                        <Button color="danger" onClick={() => handleDelete(faq.articleID)} style={{ margin: '10px' }}>Delete</Button>
-                                    )} {/*implementation to display the delete button only for the administrator ends here*/}
-                                    {faq.isOpen ? 'v' : '>'}</span>  {/*Display the arrow icon v when faq is open and > when it is closed*/}
+                                        <Button color="danger" onClick={() => handleDelete(faq.articleID)} style={{ margin: '10px' }}>Delete</Button>    /*implementation to display the delete button only for the administrator ends here*/
+                                    )} 
+                                    {faq.isOpen ? 'v' : '>'}</span>                                                                                      {/*Display the arrow icon v when faq is open and > when it is closed*/}
                             </Button>
                             {/* Display the content of the FAQ when it is open*/}
                             {faq.isOpen && (
@@ -158,7 +157,7 @@ const FAQ = () => {
                             )}
                         </div>
                     ))
-                    ): ("Loading")}  {/*else display loading*/}
+                    ): ("Loading")}                                                                                                                       {/*else display loading*/}
                 </Col>
             </Row>
         </Container>

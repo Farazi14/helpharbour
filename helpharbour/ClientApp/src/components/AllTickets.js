@@ -1,44 +1,45 @@
-﻿import React, { useState, useEffect } from 'react';
-import { Container, Row, Col, Table, Button, Form, FormGroup, Label, Input  } from 'reactstrap';
-import { useAuth } from '../context/AuthContext';
-import { useNavigate } from 'react-router-dom';
+﻿import React, { useState, useEffect } from 'react';                                                 // Importing react, useState and useEffect
+import { Container, Row, Col, Table, Button, Form, FormGroup, Label, Input  } from 'reactstrap';    // Importing Container, Row, Col, Table, Button, Form, FormGroup, Label, Input from reactstrap
+import { useAuth } from '../context/AuthContext';                                                   // Importing useAuth from AuthContext
+import { useNavigate } from 'react-router-dom';                                                     // Importing useNavigate from react-router-dom
 
 
 const AllTickets = () => {
-    const [tickets, setTickets] = useState([]); // Define the state variable for storing the tickets
-    const navigate = useNavigate();     // Define the navigate function for redirecting to login page
-    const [selectedStatus, setSelectedStatus] = useState('');       // Define the state variable for storing the selected status after it is selected from the dropdown menu
-    const [statuses, setStatuses] = useState([]);       // store the unique statuses in the statuses variable
-    const { isLoggedIn, user } = useAuth();    // storing user details in the user variable
+    const [tickets, setTickets]               = useState([]);                                       // Define the state variable for storing the tickets
+    const navigate                            = useNavigate();                                      // Define the navigate function for redirecting to login page
+    const [selectedStatus, setSelectedStatus] = useState('');                                       // Define the state variable for storing the selected status after it is selected from the dropdown menu
+    const [statuses, setStatuses]             = useState([]);                                       // store the unique statuses in the statuses variable
+    const {user }                             = useAuth();                                          // storing user details in the user variable
 
     // Implement the useEffect hook to fetch the status of tickets
     useEffect(() => {
-
-        if (!isLoggedIn) {
-            navigate('/'); // Redirect to the login page if not logged in
+        // Redirect to the login page if not logged in
+        if (!user) {
+            navigate('/'); 
             return;
         }
+
         // Implement the fetchTickets API to fetch the tickets
         const fetchStatus = async () => {
             
-            const response = await fetch('/api/ticket/allstatus');   //API call to get all statuses   
+            const response = await fetch('/api/ticket/allstatus');                                  //API call to get all statuses   
 
             if (response.ok) {
-                const statuses = await response.json();   // Get the statuses from the response
+                const statuses = await response.json();                                             // Get the statuses from the response
                 
-                setStatuses(statuses); // Set unique statuses
+                setStatuses(statuses);                                                              // Set unique statuses
             } else {
                 alert('Failed to fetch ticket status.');
             }           
         };
 
-        fetchStatus(); // Call the fetchTickets function
+        fetchStatus();                                                                              // Call the fetchTickets function
     }, []);
 
 
     const handleStatusChange = async (event) => {
-        const selectedStatus = event.target.value; // Get the selected status from the dropdown menu
-        setSelectedStatus(selectedStatus); // Update the selected status state
+        const selectedStatus = event.target.value;                                                  // Get the selected status from the dropdown menu
+        setSelectedStatus(selectedStatus);                                                          // Update the selected status state
 
         if (selectedStatus) {
             try {
@@ -56,22 +57,20 @@ const AllTickets = () => {
                 } else {
                     console.error("Failed to fetch tickets by status");
                     alert("Failed to fetch tickets by status.");
-                    setTickets([]); // Clear tickets if the fetch fails
+                    setTickets([]);                                                                 // Clear tickets if the fetch fails
                 }
             } catch (error) {
                 console.error("Error fetching tickets by status:", error);
                 alert("An error occurred while fetching tickets.");
-                setTickets([]); // Clear tickets on error
+                setTickets([]);                                                                     // Clear tickets on error
             }
         } else {
-            setTickets([]); // Optionally clear tickets if no status is selected
+            setTickets([]);                                                                         // Optionally clear tickets if no status is selected
         }
         
     }
 
     const handleTicketSelect = (ticketId) => {
-        // Implement navigation to ticket details page
-        console.log("Selected ticket ID:", ticketId);
         navigate(`/viewticket/${ticketId}`);
     };
 
@@ -87,9 +86,9 @@ const AllTickets = () => {
             });
 
             if (response.ok) {
-                alert('Ticket deleted successfully.'); // Display success message
-                const updatedTickets = tickets.filter(ticket => ticket.ticketID !== ticketId); // Filter out the deleted ticket
-                setTickets(updatedTickets); // Update the tickets state
+                alert('Ticket deleted successfully.');                                              // Display success message
+                const updatedTickets = tickets.filter(ticket => ticket.ticketID !== ticketId);      // Filter out the deleted ticket
+                setTickets(updatedTickets);                                                         // Update the tickets state
             } else {
                 alert('Failed to delete ticket.');
             }
@@ -105,11 +104,11 @@ const AllTickets = () => {
                 <Col>
                     <strong><p>Please use the following dropdown menu to view the ticket by status:</p></strong>
                     <Form>
-                        <FormGroup> {/* Implementing the form group for the status filter so that the user can select the status*/}
+                        <FormGroup>                                                                                                     {/* Implementing the form group for the status filter so that the user can select the status*/}
                             <Label for="statusFilter">Filter by Status:</Label>
                             <Input type="select" name="status" id="statusFilter" onChange={handleStatusChange} value={selectedStatus}>  {/* Implementing the dropdown menu for the status filter and calling handleStatusChange function on change to the dropdownmenu  */}
                                 <option value="">Select a Status</option>
-                                {statuses.map(status => (   // Mapping the received statuses to the dropdown menu
+                                {statuses.map(status => (                                                                               // Mapping the received statuses to the dropdown menu
                                     <option key={status} value={status}>{status}</option>
                                 ))}
                             </Input>
@@ -151,7 +150,7 @@ const AllTickets = () => {
                                         <td>{new Date(ticket.createdDate).toLocaleDateString()}</td>
                                         <td>
 
-                                            <Button color="primary" onClick={() => handleTicketSelect(ticket.ticketID)}>View</Button>
+                                            <p><Button color="primary" onClick={() => handleTicketSelect(ticket.ticketID)}>View</Button></p>
                                              {/*Display delete button for unassigned ticket as they may not be a valid ticket*/}
                                              {ticket.status === "Unassigned" && (
                                                 <Button color="danger" onClick={() => handleDeleteTicket(ticket.ticketID)} >Delete</Button>

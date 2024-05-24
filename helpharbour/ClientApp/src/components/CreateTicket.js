@@ -1,33 +1,28 @@
-import React,  { useEffect, useState }  from 'react';
-import { useNavigate } from 'react-router-dom';
-import './NavMenu.css';
-import { Container, Row, Col, Form, FormGroup, Label, Input, Button, FormFeedback } from 'reactstrap';
-import { useAuth } from '../context/AuthContext';
+import React,  { useEffect, useState }  from 'react';                                                  // Importing useEffect and useState hooks from react
+import { useNavigate } from 'react-router-dom';                                                        // Importing useNavigate hook from react-router-dom
+import { Container, Row, Col, Form, FormGroup, Label, Input, Button, FormFeedback } from 'reactstrap'; // Importing Container, Row, Col, Form, FormGroup, Label, Input, Button, FormFeedback components from reactstrap
+import { useAuth } from '../context/AuthContext';                                                      // Importing useAuth hook from AuthContext
 
 
 const CreateTicket = () => {
-    // define the state variables
-    const [type, setType] = useState('');
-    const [urgency, setUrgency] = useState('');
-    const [title, setTitle] = useState('');
-    const [description, setDescription] = useState('');
-    const [charCount, setCharCount] = useState(0);  // Added a charCount state to track the number of characters in the description field
-    const [touched, setTouched] = useState({  // Added a touched state to track the fields that have been touched
+    
+    const [type, setType]               = useState('');                                                // Defining the type state variable for the form for field validation
+    const [urgency, setUrgency]         = useState('');                                                // Defining the urgency state variable for the form for field validation
+    const [title, setTitle]             = useState('');                                                // Defining the title state variable for the form for field validation
+    const [description, setDescription] = useState('');                                                // Defining the description state variable for the form for field validation
+    const [charCount, setCharCount]     = useState(0);                                                 // Added a charCount state to track the number of characters in the description field
+    const [touched, setTouched]         = useState({                                                   // Added a touched state to track the fields that have been touched for field validation
         type: false,
         urgency: false,
         title: false,
         description: false
     });
-    const navigate = useNavigate();
-    const { isLoggedIn, user } = useAuth();  // Get the user details from the AuthContext
+    const navigate                      = useNavigate();
+    const { isLoggedIn, user }          = useAuth();                                                   // Get the user details from the AuthContext
 
-    // login validation
-    useEffect(() => {
-        if (!isLoggedIn) {
-            navigate('/'); // Redirect to the home/login page if not logged in
-        }
-    }, [isLoggedIn, navigate]);
-    
+    if (!isLoggedIn) {
+        navigate('/');
+    }
 
     // Implement the isFormValid function to check if the form is valid upon submission using state variables
     const isFormValid = () => {
@@ -52,7 +47,7 @@ const CreateTicket = () => {
     
     // Implement the handleBlur function to track the fields that have been touched
     const handleBlur = (field) => () => {
-        setTouched({ ...touched, [field]: true });  // Update the touched state
+        setTouched({ ...touched, [field]: true });                                                      // Update the touched state
     };
 
     // Implement the event handlers for the form fields so that the state is updated when the user interacts with the form
@@ -87,9 +82,9 @@ const CreateTicket = () => {
             urgency: urgency,
             title: title,
             description: description,
-            Requestor: `${user.userID}`, // Add the username of the logged-in user as the Requestor
-            assigned: "", // Add the assigned field with a default value of "Unassigned"
-            status: "Unassigned" // Add the status of the newly created ticket
+            Requestor: `${user.userID}`,                                                                // Add the username of the logged-in user as the Requestor
+            assigned: "",                                                                               // Add the assigned field with a default value of "Unassigned"
+            status: "Unassigned"                                                                        // Add the status of the newly created ticket
         };
         console.log("here ", ticketData);
         // Implementing the API call to submit the form data
@@ -100,7 +95,7 @@ const CreateTicket = () => {
                     'Content-Type': 'application/json',
                     
                 },
-                body: JSON.stringify(ticketData)
+                body: JSON.stringify(ticketData)                                                       // Convert the ticketData object to a JSON string to send in the request body for creating a new ticket
             });
 
             if (response.ok) {
@@ -109,7 +104,7 @@ const CreateTicket = () => {
                 
                 handleReset();
                 alert('Ticket submitted successfully!');
-                navigate('/dashboard');  // Redirect to the dashboard after successful ticket submission)
+                navigate('/dashboard');                                                                // Redirect to the dashboard after successful ticket submission)
             } else {
                 const errorData = await response.json();
                 alert(`Failed to submit ticket: ${errorData.message}`);
@@ -131,7 +126,7 @@ const CreateTicket = () => {
                     <h1 >Create Ticket</h1>
                     {/*Form implementation with the use of the state variables and event handlers*/}
                     <Form onSubmit={handleSubmit} style={{ marginTop: '2em' }}>
-                        <FormGroup>   {/*Form group for the type field*/}
+                        <FormGroup>                                                                 
                             <Label for="typeSelect"> <strong>Issue Type*</strong></Label>
 
                             {/*Select input for the type field and validation using the touched state*/}
@@ -140,7 +135,7 @@ const CreateTicket = () => {
                                 <option value="Incident">Incident</option>
                                 <option value="Request">Request</option>
                             </Input>
-                            {touched.type && type === '' && <FormFeedback>This field is required.</FormFeedback>} {/*Display the error message if the field is touched and empty*/}
+                            {touched.type && type === '' && <FormFeedback>This field is required.</FormFeedback>}                          {/*Display the error message if the field is touched and empty*/}
                         </FormGroup>
                         <FormGroup>
                             <Label for="urgencySelect"> <strong>Urgency*</strong> </Label>
@@ -155,7 +150,7 @@ const CreateTicket = () => {
                         <FormGroup>
                             <Label for="titleInput"> <strong> Title* </strong></Label>
                             <Input type="text" name="title" id="titleInput" value={title} onChange={handleTitleChange} onBlur={handleBlur('title')} maxLength={250} invalid={touched.title && validateInput(title, 250) !== ''} />
-                            {touched.title && validateInput(title, 250) && <FormFeedback>{validateInput(title, 250)}</FormFeedback>} {/*Display the error message if the field is touched and invalid using FormFeedback*/}
+                            {touched.title && validateInput(title, 250) && <FormFeedback>{validateInput(title, 250)}</FormFeedback>}        {/*Display the error message if the field is touched and invalid using FormFeedback*/}
                         </FormGroup>
                         <FormGroup>
                             <Label for="descriptionTextarea"><strong>Description* </strong></Label>

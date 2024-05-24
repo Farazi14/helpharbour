@@ -1,13 +1,14 @@
-﻿import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Container, Row, Col, Form, FormGroup, Label, Input, Button } from 'reactstrap';
-import { useAuth } from '../context/AuthContext';
+﻿import React, { useState } from 'react';                                                // Import the useState hook
+import { useNavigate } from 'react-router-dom';                                         // Import the useNavigate hook
+import { Container, Row, Col, Form, FormGroup, Label, Input, Button } from 'reactstrap';// Import the reactstrap components
+import { useAuth } from '../context/AuthContext';                                       // Import the useAuth hook
 
 const Login = () => {
+    // Define the state variables for the username and password
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const navigate = useNavigate();
-    const { setLoggedIn } = useAuth();
+    const navigate                = useNavigate();
+    const { setLoggedIn }         = useAuth();
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -23,8 +24,8 @@ const Login = () => {
 
         if (response.ok) {
             // If authentication is successful
-            const userDetails = await response.json(); // get the user details
-            setLoggedIn(true, userDetails); // Update the logged-in state
+            const userDetails = await response.json();                                  // get the user details
+            setLoggedIn(true, userDetails);                                             // Update the logged-in state
             navigate('/dashboard');
         } else {
             // If authentication fails
@@ -42,7 +43,7 @@ const Login = () => {
             <h1>Login</h1>
             <Container>
                 <Row>
-                    <Col md={{ offset: 3, size: 6 }} sm="12">
+                    <Col md={{ offset: 3, size: 6 }} sm="12">                             {/*setting the content to the middle of the screen*/}
                         <h3>Please enter your credentials</h3>
                         <Form onSubmit={handleSubmit}>
                             <FormGroup>
@@ -58,11 +59,7 @@ const Login = () => {
                                 <Button color="secondary" onClick={handleReset}>Reset</Button>
                             </div>
                         </Form>
-                        {/*<div className="text-center mt-4">*/}
-                        {/*    <hr />*/}
-                        {/*    <p>Please click the following link to sign up</p>*/}
-                        {/*    <Button color="link">Register</Button>*/}
-                        {/*</div>*/}
+                       
                     </Col>
                 </Row>
             </Container>

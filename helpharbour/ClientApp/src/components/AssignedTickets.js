@@ -1,52 +1,54 @@
-﻿import React, { useState, useEffect } from 'react';
-import { Container, Row, Col, Table, Button } from 'reactstrap';
-import { useAuth } from '../context/AuthContext';
-import { useNavigate } from 'react-router-dom';
-
+﻿import React, { useState, useEffect } from 'react';                // Import the useState and useEffect hooks from React
+import { Container, Row, Col, Table, Button } from 'reactstrap';   // Import the Container, Row, Col, Table, and Button components from the Reactstrap library
+import { useAuth } from '../context/AuthContext';                  // Import the useAuth hook from the AuthContext to access the user details and authentication status
+import { useNavigate } from 'react-router-dom';                    // Import the useNavigate hook from the React Router DOM library to navigate to different routes 
 
 
 const AssignedTickets = () => {
     // define the state variables
-    const navigate = useNavigate();
-    const { isLoggedIn, user } = useAuth();
-    const [tickets, setTickets] = useState([]);
-    const [showTickets, setShowTickets] = useState(false); // Define the state variable to show or hide the tickets in a toggle manner
+    const navigate                       = useNavigate();
+    const { user }                       = useAuth();
+    const [tickets, setTickets]          = useState([]);
+    const [showTickets, setShowTickets]  = useState(false);        // Define the state variable to show or hide the tickets in a toggle manner
+
+    // Redirect to the login page if the user is not logged in
+    if (!user) {
+        navigate('/');
+    } 
 
     useEffect(() => {
-        // Redirect to the login page if the user is not logged in
-        if (!isLoggedIn) {
-            navigate('/');
-        } else {
-            fetchAssignedTickets();
-        }
-    }, [isLoggedIn, navigate]);
+        
+        // Implement the fetchAssignedTickets function to fetch the assigned tickets for the logged-in user
+        const fetchAssignedTickets = async () => {
+            try {
+                const response = await fetch(`/api/ticket/assigned/${user.userID}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                });
 
-    // Implement the fetchAssignedTickets function to fetch the assigned tickets for the logged-in user
-    const fetchAssignedTickets = async () => {
-        try {
-            const response = await fetch(`/api/ticket/assigned/${user.userID}`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
+                if (response.ok) {
+                    const data = await response.json();
+
+                    setTickets(data);
+                } else {
+                    alert("Failed to fetch tickets");
                 }
-            });
-
-            if (response.ok) {
-                const data = await response.json();
-                
-                setTickets(data);
-            } else {
-                alert("Failed to fetch tickets");
+            } catch (error) {
+                console.error("Failed to fetch assigned tickets:", error);
+                alert("An error occurred while fetching tickets.");
             }
-        } catch (error) {
-            console.error("Failed to fetch assigned tickets:", error);
-            alert("An error occurred while fetching tickets.");
-        }
-    };
+        };
+            fetchAssignedTickets();
+        
+    });
 
-    // Implement the toggleTickets function to show or hide the tickets
+    
+
+    // Implement the toggleTickets function to show or hide the tickets false by default meaning hidden
     const toggleTickets = () => {  
-        setShowTickets(!showTickets);  // Toggle the showTickets state by default it is false meaning hidden
+        setShowTickets(!showTickets);                                   
     };
   
 
@@ -80,10 +82,10 @@ const AssignedTickets = () => {
                              {/*Display the tickets in a table if there are any tickets*/}
                             {tickets.length > 0 ? (
                                 tickets.map((ticket) => (
-                                    // Display the ticket details in a table row except for resolved tickets
+                                    /* Display the ticket details in a table row except for resolved tickets*/
                                     ticket.status !== "Resolved" ? ( 
                                     <tr key={ticket.ticketID}>
-                                        <th scope="row">{ticket.ticketID}</th>  {/* Displaying ticketID*/}
+                                        <th scope="row">{ticket.ticketID}</th> 
                                         <td>{ticket.title}</td>
                                         <td>{ticket.type}</td>
                                         <td>{ticket.description}</td>
