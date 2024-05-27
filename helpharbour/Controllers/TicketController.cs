@@ -9,27 +9,27 @@ namespace helpharbour.Controllers
     [Route("api/[controller]")]
     public class TicketController : ControllerBase
     {
-        private readonly TicketDAO _ticketDAO; // Injected TicketDAO
+        private readonly TicketDAO _ticketDAO;                                                  // Injected TicketDAO
         private readonly ILogger<UserAccountController> _logger;
 
         // Adjust the constructor to include TicketDAO
         public TicketController(TicketDAO ticketDAO, ILogger<UserAccountController> logger)
         {
-            _ticketDAO = ticketDAO; // Initialize TicketDAO
-            _logger = logger;  // adding logger to track ticket operations
+            _ticketDAO = ticketDAO;                                                             // Initialize TicketDAO
+            _logger = logger;                                                                   // adding logger to track ticket operations
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<ticket>> Get() // Ensure the return type matches your model because of <ticket> in the ActionResult
+        public ActionResult<IEnumerable<ticket>> Get()                                          // Ensure the return type matches your model because of <ticket> in the ActionResult
         {
             try
             {
                 var tickets = _ticketDAO.GetAllTickets();
-                return Ok(tickets); // Return the tickets with HTTP 200 OK
+                return Ok(tickets);                                                             // Return the tickets with HTTP 200 OK
             }
             catch (Exception)
             {
-                return StatusCode(500, "Internal server error"); // Handle exceptions gracefully
+                return StatusCode(500, "Internal server error");                                // Handle exceptions gracefully
             }
         }
 
@@ -42,13 +42,13 @@ namespace helpharbour.Controllers
                 var ticket = _ticketDAO.GetTicketById(ticketId);
                 if (ticket == null)
                 {
-                    return NotFound(); // Return HTTP 404 Not Found if ticket is not found
+                    return NotFound();                                                          // Return HTTP 404 Not Found if ticket is not found
                 }
-                return Ok(ticket); // successful response with the ticket
+                return Ok(ticket);                                                              // successful response with the ticket
             }
             catch (Exception)
             {
-                return StatusCode(500, "Internal server error"); // Handle exceptions gracefully
+                return StatusCode(500, "Internal server error");                                // Handle exceptions gracefully
             }
         }
 
@@ -57,9 +57,7 @@ namespace helpharbour.Controllers
         [HttpPost]
         public ActionResult<ticket> Post([FromBody] ticket newTicket)
         {
-            _logger.LogInformation("Adding a new ticket");
-            _logger.LogInformation("Ticket : " + newTicket);
-
+            
             try
             {
                 var create_Ticket = _ticketDAO.AddTicket(newTicket);
@@ -85,7 +83,7 @@ namespace helpharbour.Controllers
                 }
                 //updatedTicket.ticketID = ticketId;  
 
-                ticket.status = updateStatus.status; // Update only the status
+                ticket.status = updateStatus.status;                                                // Update only the status
                 var updatedTicket = _ticketDAO.UpdateTicket(ticketId, ticket);
                 return Ok(updatedTicket); 
             }
@@ -107,7 +105,7 @@ namespace helpharbour.Controllers
                     return NotFound(); 
                 }
                 _ticketDAO.DeleteTicket(ticketId);
-                return NoContent(); // Return HTTP 204 No Content
+                return NoContent();                                                                   // Return HTTP 204 No Content
             }
             catch (Exception)
             {
@@ -161,7 +159,7 @@ namespace helpharbour.Controllers
                 }
 
                 ticket.assigned = assignee.Assigned;
-                ticket.status = assignee.status;        // Update the status
+                ticket.status = assignee.status;                                                                            // Update the status
                 
                 _ticketDAO.UpdateTicket(ticketId, ticket);
 
@@ -182,15 +180,15 @@ namespace helpharbour.Controllers
             _logger.LogInformation("GetAllStatuses method is called");
             try
             {
-                var statuses = _ticketDAO.GetAllStatuses(); // calling Get all statuses method from DAO
-                if (statuses == null || !statuses.Any())  // check if the statuses are null or empty
+                var statuses = _ticketDAO.GetAllStatuses();                                                                 // calling Get all statuses method from DAO
+                if (statuses == null || !statuses.Any())                                                                    // check if the statuses are null or empty
                 {
                     return NotFound("No statuses found.");
                 }
                 return Ok(statuses);
             }
             catch (Exception ex) { // catch the exception if any            
-                
+                _logger.LogError(ex, "Failed to display statuses.");
                 return StatusCode(500, "Internal server error");
             }
         }
@@ -201,7 +199,7 @@ namespace helpharbour.Controllers
         {
             try
             {
-                var tickets = _ticketDAO.GetTicketsByStatus(status); // calling GetTicketsByStatus method from DAO and passing the status
+                var tickets = _ticketDAO.GetTicketsByStatus(status);                                                        // calling GetTicketsByStatus method from DAO and passing the status
                 if (tickets == null || !tickets.Any())
                     return NotFound("No tickets found with the specified status.");
 
@@ -214,8 +212,31 @@ namespace helpharbour.Controllers
             }
         }
 
+        //implementation to get ticket counts by status for a user
+        [HttpGet("user/{userId}/status-counts")]
+        public ActionResult GetTicketCountsByStatusForUser(string userId)
+        {
 
-
+            _logger.LogInformation("GetTicketCountsByStatusForUser method is called, {userID} ", userId);                  
+            try
+            {
+                var ticketCounts = _ticketDAO.GetTicketCountsByStatusForUser(userId);
+                if (ticketCounts == null || !ticketCounts.Any())
+                    return NotFound("No ticket status counts found for the user.");
+                    
+                return Ok(new                                                                                               // return the ticket counts by status for the user 
+                {
+                    assignedCount = ticketCounts.GetValueOrDefault("Assigned", 0),                                          // get the assigned count from the dictionary and if not found then return 0
+                    unassignedCount = ticketCounts.GetValueOrDefault("Unassigned", 0),                                      // get the unassigned count from the dictionary and if not found then return 0
+                    resolvedCount = ticketCounts.GetValueOrDefault("Resolved", 0)                                           // get the resolved count from the dictionary and if not found then return 0
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to fetch ticket status counts.");
+                return StatusCode(500, "Internal server error");
+            }
+        }
 
     }
 }

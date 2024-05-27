@@ -4,7 +4,7 @@ import { useAuth } from '../context/AuthContext'; // Importing useAuth hook from
 import { Container, Row, Col } from 'reactstrap'; // Importing Container, Row, Col components from reactstrap
 import AssignedTickets from './AssignedTickets';  // Importing  AssignedTickets component
 import MyTicket from './MyTicket';                // Importing MyTicket component
-
+import Charts from './Charts';                    // Importing Charts component
 
 const Dashboard = () => {
    
@@ -12,7 +12,7 @@ const Dashboard = () => {
     const {user }  = useAuth();      // storing user details in the user variable
        
     if (!user) {
-        navigate('/'); // Redirect to the login page if not logged in
+        navigate('/');              // Redirect to the login page if not logged in
         return;
     }
     
@@ -25,13 +25,15 @@ const Dashboard = () => {
                         <p>Welcome to the Dashboard,  <strong>{user?.username}</strong>!! You are logged as <strong>{user?.role}</strong> .</p>
                     </Col>
                 </Row>
+                {/* Displaying Charts component */}
                 <Row> 
-                    <Col>
-                        <p>Charts display will go there!!</p>
+                    <h3>My Tickets' Status Summary</h3>
+                    <Col className="d-flex justify-content-center">
+                        <Charts />
                     </Col>   
                 </Row>
                 {/* Displaying MyTicket component */}
-                <Row>
+                <Row className="mt-5">
                     <Col>
                         <MyTicket />
                     </Col>

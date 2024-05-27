@@ -58,7 +58,7 @@ const AssignedTickets = () => {
             <Row>
                 <Col>
                     {/* Display the assigned tickets with a toggle behaviour*/}
-                    <h2>Assigned Tickets <strong><span style={{ cursor: "pointer", fontSize: '1rem', userSelect: 'none', color: 'blue', }} onClick={toggleTickets}>[{showTickets ? 'Hide' : 'Show'}]</span></strong></h2>  
+                    <h3>Assigned Tickets <strong><span style={{ cursor: "pointer", fontSize: '1rem', userSelect: 'none', color: 'blue', }} onClick={toggleTickets}>[{showTickets ? 'Hide' : 'Show'}]</span></strong></h3>  
                 </Col>
             </Row>
             {showTickets && (

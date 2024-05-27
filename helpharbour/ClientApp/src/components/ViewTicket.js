@@ -5,27 +5,27 @@ import { useAuth } from '../context/AuthContext';                               
 import { useNavigate } from 'react-router-dom';                                                                                 //  Import the useNavigate hook from the React Router DOM library to navigate to different routes 
 
 const ViewTicket = () => {
-    const [ticket, setTicket]                     = useState(null);
+    const [ticket, setTicket] = useState(null);
     const [assignedUserName, setAssignedUserName] = useState('');                                                               // State to store the assigned user name
-    const [comments, setComments]                 = useState([]);                                                               // State to store the comments for the ticket
-    const { ticketId }                            = useParams();                                                                // Access the ticketId parameter from the URL
-    const [message, setMessage]                   = useState('');                                                               // State to store the message to be posted
-    const { isLoggedIn, user }                    = useAuth();                                                                  // Get the user details from the AuthContext
-    const navigate                                = useNavigate();                                                              // Get the navigate function from react-router-dom
-    const [selectedAdmin, setSelectedAdmin]       = useState('');                                                               // State to store the selected admin for reassignment
-    const [administrators, setAdministrators]     = useState([]);                                                               // State to store the list of administrators
-    const [selectedTech, setSelectedTech]         = useState('');                                                               // State to store the selected technician for reassignment
-    const [technicians, setTechnicians]           = useState([]);                                                               // State to store the list of technicians
-    const [isLoading, setIsLoading]               = useState(true);                                                             // State to track loading state of admin list
+    const [comments, setComments] = useState([]);                                                               // State to store the comments for the ticket
+    const { ticketId } = useParams();                                                                // Access the ticketId parameter from the URL
+    const [message, setMessage] = useState('');                                                               // State to store the message to be posted
+    const { user } = useAuth();                                                                  // Get the user details from the AuthContext
+    const navigate = useNavigate();                                                              // Get the navigate function from react-router-dom
+    const [selectedAdmin, setSelectedAdmin] = useState('');                                                               // State to store the selected admin for reassignment
+    const [administrators, setAdministrators] = useState([]);                                                               // State to store the list of administrators
+    const [selectedTech, setSelectedTech] = useState('');                                                               // State to store the selected technician for reassignment
+    const [technicians, setTechnicians] = useState([]);                                                               // State to store the list of technicians
+    const [isLoading, setIsLoading] = useState(true);                                                             // State to track loading state of admin list
 
-     // Redirect to the home/login page if not logged in
-    if (!isLoggedIn) {
+    // Redirect to the home/login page if not logged in
+    if (!user) {
         navigate('/');
     }
 
     // Fetch ticket details and comments when the component renders using useEffect
-    useEffect(() => {                                                                                                          
-       
+    useEffect(() => {
+
         // Fetch the user details for the assigned user
         const fetchUser = async (userId) => {
             if (!userId) return;
@@ -56,7 +56,7 @@ const ViewTicket = () => {
             }
         };
 
-       // Fetch comments for the ticket
+        // Fetch comments for the ticket
         const fetchComments = async () => {
             try {
                 const response = await fetch(`/api/comment/ticket/${ticketId}`);                                               // Fetch comments for the ticket
@@ -71,7 +71,7 @@ const ViewTicket = () => {
                         };
                     }));
                     setComments(commentsWithUserDetails);
-                } else if (response.status === 404) {    
+                } else if (response.status === 404) {
                     setComments([]);                                                                                           // Set to an empty array if no comments found
                 } else {
                     alert('Failed to fetch comments');
@@ -89,15 +89,15 @@ const ViewTicket = () => {
             const response = await fetch('/api/useraccount/admins');
             if (response.ok) {
                 const admins = await response.json();
-                
+
                 setAdministrators(admins);
                 setIsLoading(false);                                                                                          // Set loading state to false after fetching the list of administrators
             }
-            
+
         };
 
         //fetch the list of technicians
-            const fetchTechnicians = async () => {
+        const fetchTechnicians = async () => {
             setIsLoading(true);                                                                                               // Set loading state to true before fetching the list of technicians
             const response = await fetch('/api/useraccount/technicians');
             if (response.ok) {
@@ -105,7 +105,7 @@ const ViewTicket = () => {
                 setTechnicians(techs);
                 setIsLoading(false);                                                                                          // Set loading state to false after fetching the list of technicians
             }
-            
+
         };
 
 
@@ -113,7 +113,7 @@ const ViewTicket = () => {
         fetchAdministrators();
         fetchTicketDetails();
         fetchComments();
-    }, [ticketId, isLoggedIn, navigate]);         
+    }, [ticketId]);
 
     // Function to handle posting a new comment
     const handlePostMessage = async (event, action) => {
@@ -133,12 +133,12 @@ const ViewTicket = () => {
             },
             body: JSON.stringify({ message, userID: user.userID, ticketId })                                                  // Send the message, user ID, and ticket ID in the request body
         });
-        
+
 
         if (response.ok) {
             const newComment = await response.json();
             // Fetch the username for the user who posted the comment
-            const userResponse = await fetch(`/api/useraccount/${user.userID}`); 
+            const userResponse = await fetch(`/api/useraccount/${user.userID}`);
             const userData = await userResponse.json();
             const authorName = userResponse.ok ? userData.username : 'Unknown';                                               // Get the author's username
 
@@ -157,7 +157,7 @@ const ViewTicket = () => {
 
         //here check if the resolve button is clicked, to make another api call to update the status of the ticket and then navigate to the assigned ticket page
         if (action === 'resolve') {
-                const resolveResponse = await fetch(`/api/ticket/${ticketId}/status`, {
+            const resolveResponse = await fetch(`/api/ticket/${ticketId}/status`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ status: 'Resolved' })                                                                 // Update the status to 'Resolved'
@@ -174,30 +174,30 @@ const ViewTicket = () => {
     };
     // Function to handle reassigning the ticket to a different administrator
     const handleReassign = async () => {
-        console.log(selectedTech || selectedAdmin )
+        console.log(selectedTech || selectedAdmin)
         try {
             const response = await fetch(`/api/ticket/${ticket.ticketID}/assign`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
-                    
+
                 },
                 body: JSON.stringify({
                     assigned: selectedAdmin || selectedTech,                                                                  // send the selected admin or technician ID in the request body because both form inputs are calling the same function
                     status: "Assigned"                                                                                        // As soon as the ticket is assigned or reassigned, the status would change to assigned so that the assignee would know that they have been assigned a ticket 
-                }) 
+                })
             });
 
             if (response.ok) {
-                if (user.role === 'Technician') { 
-                alert('Ticket successfully reassigned.');
+                if (user.role === 'Technician') {
+                    alert('Ticket successfully reassigned.');
                     navigate('/dashboard');
                 }
                 if (user.role === 'administrator') {
                     alert('Ticket successfully assigned.');
                     navigate('/allticket');
                 }
-               
+
             } else {
                 alert('Failed to reassign ticket. Please try again.');
             }
@@ -241,7 +241,7 @@ const ViewTicket = () => {
                                     {/*if the ticket is not assigned to anyone, display "Not assigned" in the table cell*/}
                                     {assignedUserName ? (
                                         <td>{assignedUserName}</td>
-                                    ) : ( <td>Not assigned</td> 
+                                    ) : (<td>Not assigned</td>
                                     )}
                                 </tr>
 
@@ -250,27 +250,27 @@ const ViewTicket = () => {
                                     <tr>
                                         <th>Reassign</th>
                                         <td>
-                                           {/* Display dropdown to select an administrator for ticket reassignment*/}
+                                            {/* Display dropdown to select an administrator for ticket reassignment*/}
                                             <Form inline>
                                                 <FormGroup>
                                                     <Label for="adminSelect" hidden>Select Admin</Label>
                                                     {/*Display a loading message while the list of administrators is being fetched*/}
-                                                    {isLoading ? ( 
+                                                    {isLoading ? (
                                                         <Input type="select" name="admin" id="adminSelect" disabled>
                                                             <option>Loading...</option>
                                                         </Input>
                                                     ) : (
-                                                            <Input type="select" name="admin" id="adminSelect" onChange={e => setSelectedAdmin(e.target.value)} value={selectedAdmin}> {/*Select an administrator from the dropdown and once onchange event is triggered, the selected admin will be set in the state*/}
+                                                        <Input type="select" name="admin" id="adminSelect" onChange={e => setSelectedAdmin(e.target.value)} value={selectedAdmin}> {/*Select an administrator from the dropdown and once onchange event is triggered, the selected admin will be set in the state*/}
                                                             <option value="">Select an Administrator</option>
-                                                                {/*Display the list of administrators in the dropdown using map function*/}
-                                                                {administrators.map((admin) => (
+                                                            {/*Display the list of administrators in the dropdown using map function*/}
+                                                            {administrators.map((admin) => (
                                                                 <option key={admin.userID} value={admin.userID}>{admin.username}</option>
                                                             ))}
                                                         </Input>
                                                     )}
                                                 </FormGroup>
                                                 {/*Display the reassign button only if an admin is selected*/}
-                                                {selectedAdmin && (  
+                                                {selectedAdmin && (
                                                     <Button color="primary" onClick={handleReassign}>Reassign</Button>
                                                 )}
                                             </Form>
@@ -293,7 +293,7 @@ const ViewTicket = () => {
                                                             <option>Loading...</option>
                                                         </Input>
                                                     ) : (
-                                                            <Input type="select" name="technician" id="TechnicianSelect" onChange={e => setSelectedTech(e.target.value)} value={selectedTech}> {/*Select a technician from the dropdown and once onchange event is triggered, the selected tech will be set in the state*/}
+                                                        <Input type="select" name="technician" id="TechnicianSelect" onChange={e => setSelectedTech(e.target.value)} value={selectedTech}> {/*Select a technician from the dropdown and once onchange event is triggered, the selected tech will be set in the state*/}
                                                             <option value="">Select a Technician</option>
                                                             {/*Display the list of technicians in the dropdown using map function*/}
                                                             {technicians.map((tech) => (
@@ -316,7 +316,7 @@ const ViewTicket = () => {
                         </Table>
                     )}
                 </Col>
-                
+
             </Row>
             {/*Display comments*/}
             <Row>
@@ -338,36 +338,36 @@ const ViewTicket = () => {
             </Row>
 
             {/*Post message implementation*/}
-             {/*Display the post button only if the ticket is not resolved*/}
-            {ticket && ticket.status !== 'Resolved' && ( 
-            <Row>
-                <Col className=" mt-4 " >
-                    <h2>Post Message</h2>
-                    <Form onSubmit={handlePostMessage}>
-                        <FormGroup >
-                           
-                            <Input
-                                type="textarea"
-                                name="message"
-                                value={message}
-                                onChange={e => setMessage(e.target.value)}
-                                placeholder="Please write your message here..."
-                            />
-                        </FormGroup>
+            {/*Display the post button only if the ticket is not resolved*/}
+            {ticket && ticket.status !== 'Resolved' && (
+                <Row>
+                    <Col className=" mt-4 " >
+                        <h2>Post Message</h2>
+                        <Form onSubmit={handlePostMessage}>
+                            <FormGroup >
 
-                        
-                        <div className="text-end">                                                       {/* This will align the button to the right */}
-                            <Button style={{ marginRight: '1em' }}  type="submit" color="primary">Post</Button>
+                                <Input
+                                    type="textarea"
+                                    name="message"
+                                    value={message}
+                                    onChange={e => setMessage(e.target.value)}
+                                    placeholder="Please write your message here..."
+                                />
+                            </FormGroup>
 
-                            {/*Resolved button implementation*/}
-                            {user && user.role !== "User" && (
-                                <Button type="button" onClick={(e) => handlePostMessage(e, 'resolve')} color="success">Resolve</Button> 
-                            )}
+
+                            <div className="text-end">                                                       {/* This will align the button to the right */}
+                                <Button style={{ marginRight: '1em' }} type="submit" color="primary">Post</Button>
+
+                                {/*Resolved button implementation*/}
+                                {user && user.role !== "User" && (
+                                    <Button type="button" onClick={(e) => handlePostMessage(e, 'resolve')} color="success">Resolve</Button>
+                                )}
                             </div>
-                        
-                    </Form>
-                      
-                </Col>
+
+                        </Form>
+
+                    </Col>
                 </Row>
             )}
         </Container>

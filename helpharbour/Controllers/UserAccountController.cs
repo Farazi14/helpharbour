@@ -52,48 +52,8 @@ namespace helpharbour.Controllers
             }
         }
 
-        [HttpPost]
-        public ActionResult<UserAccount> Post([FromBody] UserAccount newUserAccount)
-        {
-            try
-            {
-                var create_UserAccount = _userAccountDAO.AddUserAccount(newUserAccount);
-                return Ok(create_UserAccount); // Return the created user account with HTTP 200 OK
-            }
-            catch (Exception)
-            {
-                return StatusCode(500, "Internal server error"); // Handle exceptions gracefully
-            }
-        }
 
-        [HttpPut("{userID}")]
-        public ActionResult Put(int userID, [FromBody] UserAccount userAccount)
-        {
-            try
-            {
-                _userAccountDAO.UpdateUserAccount(userID, userAccount);
-                return Ok(); // Return HTTP 200 OK
-            }
-            catch (Exception)
-            {
-                return StatusCode(500, "Internal server error"); // Handle exceptions gracefully
-            }
-        }
-
-        [HttpDelete("{userID}")]
-        public ActionResult Delete(int userID)
-        {
-            try
-            {
-                _userAccountDAO.DeleteUserAccount(userID);
-                return Ok(); // Return HTTP 200 OK
-            }
-            catch (Exception)
-            {
-                return StatusCode(500, "Internal server error"); // Handle exceptions gracefully
-            }
-        }
-
+                
         // implement the authenticate method
         [HttpPost("authenticate")]
         public ActionResult<UserAccount> Authenticate([FromBody] UserCredentials credentials)   // CHANGE THE PARAMETER TO UserCredentials and added UserCredentials model

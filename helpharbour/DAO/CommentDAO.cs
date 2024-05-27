@@ -16,19 +16,7 @@ namespace helpharbour.DAO
         {
             comment_Collection = mongoDbConnection.GetDatabase().GetCollection<Comment>("comment");
         }
-
-        // method to get all the comments
-        public List<Comment> GetAllComments()
-        {
-            return comment_Collection.Find(comment => true).ToList();
-        }
-
-        // method to get a comment by ID
-        public Comment GetCommentById(int commentId)
-        {
-            return comment_Collection.Find<Comment>(comment => comment.commentID == commentId).FirstOrDefault();
-        }
-
+               
         // method to add a comment
         public Comment AddComment(Comment newcomment)
         {
@@ -45,18 +33,7 @@ namespace helpharbour.DAO
             return newcomment;
         }
 
-        // method to update a comment
-        public void UpdateComment(int commentID, Comment comment)
-        {
-            comment_Collection.ReplaceOne(c => c.commentID == commentID, comment);
-        }
-
-        // method to delete a comment
-        public void DeleteComment(int commentID)
-        {
-            comment_Collection.DeleteOne(comment => comment.commentID == commentID);
-        }
-
+       
         // fetch all comments for a ticket by ticketID
         public List<Comment> GetCommentsByTicketID(int ticketID)
         {

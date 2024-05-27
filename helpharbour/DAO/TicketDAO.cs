@@ -1,5 +1,6 @@
 ﻿using helpharbour.Model;
 using helpharbour.Services;
+using MongoDB.Bson;
 using MongoDB.Driver;
 using System.Net.Sockets;
 
@@ -56,28 +57,28 @@ namespace helpharbour.DAO
         public ticket UpdateTicket(int ticketId, ticket updatedTicket)
         {
             var filter = Builders<ticket>.Filter.Eq(t => t.ticketID, ticketId);
-            var update = Builders<ticket>.Update;  //defining the update builder
+            var update = Builders<ticket>.Update;                                                                       //defining the update builder
             // defining the list of updates
-            List<UpdateDefinition<ticket>> updates = new List<UpdateDefinition<ticket>>(); // defining the list of updates
+            List<UpdateDefinition<ticket>> updates = new List<UpdateDefinition<ticket>>();                              // defining the list of updates
 
-            if (!string.IsNullOrEmpty(updatedTicket.status)) // check if the status is not null, if not null then update the status
+            if (!string.IsNullOrEmpty(updatedTicket.status))                                                            // check if the status is not null, if not null then update the status
             {
                 updates.Add(update.Set(t => t.status, updatedTicket.status));
             }
 
-            if (!string.IsNullOrEmpty(updatedTicket.assigned) && !string.IsNullOrEmpty(updatedTicket.status)) // check if the assigned user and assigned status are not null , if not null then update the records
+            if (!string.IsNullOrEmpty(updatedTicket.assigned) && !string.IsNullOrEmpty(updatedTicket.status))           // check if the assigned user and assigned status are not null , if not null then update the records
             {
                 updates.Add(update.Set(t => t.assigned, updatedTicket.assigned));
                 updates.Add(update.Set(t => t.status, updatedTicket.status));
             }
 
-            var combinedUpdate = update.Combine(updates);  // combine the updates so that we can be updated in a single query
+            var combinedUpdate = update.Combine(updates);                                                               // combine the updates so that we can be updated in a single query
             var options = new FindOneAndUpdateOptions<ticket>
             {
                 ReturnDocument = ReturnDocument.After
             };
                         
-            var result = ticket_Collection.FindOneAndUpdate(filter, combinedUpdate, options); // update the ticket and store the updated ticket in result
+            var result = ticket_Collection.FindOneAndUpdate(filter, combinedUpdate, options);                           // update the ticket and store the updated ticket in result
 
             return result;
         }
@@ -104,16 +105,34 @@ namespace helpharbour.DAO
         //get statuses of tickets
         public List<string> GetAllStatuses()
         {
-            return ticket_Collection.AsQueryable()     // get all the tickets using AsQueryable function
-                                    .Select(ticket => ticket.status)  // select the status of each ticket
-                                    .Distinct()  // get the distinct statuses to remove duplicates
-                                    .ToList();  // return the list of statuses
+            return ticket_Collection.AsQueryable()                                                                  // get all the tickets using AsQueryable function
+                                    .Select(ticket => ticket.status)                                                // select the status of each ticket
+                                    .Distinct()                                                                     // get the distinct statuses to remove duplicates
+                                    .ToList();                                                                      // return the list of statuses
         }
 
         //get all tickets by status
         public List<ticket> GetTicketsByStatus(string status)
         {
-            return ticket_Collection.Find(ticket => ticket.status == status).ToList(); // get all the tickets with the given status
+            return ticket_Collection.Find(ticket => ticket.status == status).ToList();                              // get all the tickets with the given status
         }
+
+        //get ticket counts by status of a user
+        public Dictionary<string, int> GetTicketCountsByStatusForUser(string userId)                                // using dictionary to store the ticket counts by status
+        {
+            var aggregationResult = ticket_Collection.Aggregate()                                                   // aggregate the tickets collection in MongoDB to get the ticket counts by status
+                .Match(new BsonDocument { { "Requestor", userId } })                                                // match the tickets with the given user ID
+                .Group(new BsonDocument {
+                                         { "_id", "$status" },
+                                         { "count", new BsonDocument("$sum", 1) }
+                })
+                .ToList();
+
+            return aggregationResult.ToDictionary(                                                                 // convert the aggregation result to dictionary defining the key and value
+                k => k["_id"].AsString,                                                                            // key is the status
+                v => v["count"].AsInt32                                                                            // value is the count of tickets with the status
+            );
+        }
+
     }
 }

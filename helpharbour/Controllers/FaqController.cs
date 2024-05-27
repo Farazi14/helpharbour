@@ -9,14 +9,13 @@ namespace helpharbour.Controllers
     [Route("api/[controller]")]
     public class FaqController : ControllerBase
     {
-        private readonly faqDAO _faqDAO; // Injected FaqDAO
-        private readonly ILogger<UserAccountController> _logger;
-
+        private readonly faqDAO _faqDAO;                                                     // Injected FaqDAO
+        private readonly ILogger<UserAccountController> _logger;                             // Injected Logger 
 
         public FaqController(faqDAO faqDAO, ILogger<UserAccountController> logger)
         {
-            _faqDAO = faqDAO; // Initialize FaqDAO
-            _logger = logger;
+            _faqDAO = faqDAO;                                                               // Initialize FaqDAO
+            _logger = logger;                                                               // Initialze Logger to log information on the console
         }
 
         [HttpGet]
@@ -27,33 +26,14 @@ namespace helpharbour.Controllers
             try
             {
                 var faqs = _faqDAO.GetAllFaqs();
-                return Ok(faqs); // Return the faqs with HTTP 200 OK
+                return Ok(faqs);                                                            // Return the faqs with HTTP 200 OK
             }
             catch (Exception)
             {
-                return StatusCode(500, "Internal server error"); // Handle exceptions gracefully
+                return StatusCode(500, "Internal server error");                            // Handle exceptions gracefully
             }
         }
-
-        // Implementation to get a faq by ID
-        [HttpGet("{faqID}")]
-        public ActionResult<faq> Get(int faqID)
-        {
-            try
-            {
-                var faq = _faqDAO.GetFaqById(faqID);
-                if (faq == null)
-                {
-                    return NotFound(); // Return HTTP 404 Not Found if faq is not found
-                }
-                return Ok(faq); // successful response with the faq
-            }
-            catch (Exception)
-            {
-                return StatusCode(500, "Internal server error"); // Handle exceptions gracefully
-            }
-        }
-
+                
         // Implementation to add a faq
         [HttpPost("addfaq")]
         public ActionResult<faq> Post([FromBody] faq newFaq)
@@ -63,21 +43,6 @@ namespace helpharbour.Controllers
             {
                 var create_Faq = _faqDAO.AddFaq(newFaq);
                 return Ok(create_Faq); // Return the created faq with HTTP 200 OK
-            }
-            catch (Exception)
-            {
-                return StatusCode(500, "Internal server error"); // Handle exceptions gracefully
-            }
-        }
-
-        // Implementation to update a faq
-        [HttpPut("{faqID}")]
-        public ActionResult<faq> Put(int faqID, [FromBody] faq faq)
-        {
-            try
-            {
-                _faqDAO.UpdateFaq(faqID, faq);
-                return Ok(faq); // Return the updated faq with HTTP 200 OK
             }
             catch (Exception)
             {

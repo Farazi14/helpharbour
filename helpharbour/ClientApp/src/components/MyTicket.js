@@ -67,7 +67,7 @@ const MyTicket = () => {
 
     return (    
         <Container>
-                <h2>My Tickets</h2>
+               <h3>My Tickets</h3>
                <Table striped>
                         <thead>
                             <tr>
