@@ -4,7 +4,8 @@ import { useAuth } from '../context/AuthContext'; // Importing useAuth hook from
 import { Container, Row, Col } from 'reactstrap'; // Importing Container, Row, Col components from reactstrap
 import AssignedTickets from './AssignedTickets';  // Importing  AssignedTickets component
 import MyTicket from './MyTicket';                // Importing MyTicket component
-import Charts from './Charts';                    // Importing Charts component
+import MyTicketChart from './MyTicketChart';      // Importing Charts component
+import AssignedTicketChart from './AssignedTicketChart'; // Importing Charts component  
 
 const Dashboard = () => {
    
@@ -27,10 +28,18 @@ const Dashboard = () => {
                 </Row>
                 {/* Displaying Charts component */}
                 <Row> 
-                    <h3>My Tickets' Status Summary</h3>
-                    <Col className="d-flex justify-content-center">
-                        <Charts />
+                    
+                    <Col className="d-flex flex-column justify-content-center align-items-center">
+                        <h3>My Ticket Chart </h3>
+                        <MyTicketChart />
                     </Col>   
+                    
+                    {(user.role !== "User") && (
+                       <Col className="d-flex flex-column justify-content-center align-items-center">
+                        <h3>Assigned Ticket Chart</h3>
+                         <AssignedTicketChart />
+                    </Col>   
+                    )}
                 </Row>
                 {/* Displaying MyTicket component */}
                 <Row className="mt-5">

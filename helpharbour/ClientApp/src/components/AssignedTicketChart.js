@@ -3,7 +3,7 @@ import { Doughnut } from 'react-chartjs-2';                                     
 import 'chart.js/auto';                                                                             // Ensure Chart.js components are auto-registered
 import { useAuth } from '../context/AuthContext';                                                   // Import the useAuth hook
 
-const Charts = () => {
+const AssignedTicketChart = () => {
     const { user }                  = useAuth();                                                    // Get the user from the AuthContext
     const [chartData, setChartData] = useState({                                                    // Define the state variable for storing the chart data
         datasets: [],
@@ -18,7 +18,7 @@ const Charts = () => {
                     const data = await response.json();
                     
                     setChartData({                                                                  //Setting Chart Data by defining the label and dataset values            
-                        labels: ['Assigned', 'Unassigned', 'Resolved'],
+                        labels: ['Assigned', 'Unassigned', 'Closed'],
                         datasets: [
                             {
                                 label: 'Ticket Status Counts',
@@ -50,11 +50,11 @@ const Charts = () => {
     return (
         <div>
             
-            <div style={{ width: '500px', height: '300px' }}>
-                <Doughnut data={chartData} />                                                      {/* Display the Doughnut chart */}
+            <div style={{ width: '100%', height: 'auto' }}>
+                <Doughnut data={chartData} options={{ maintainAspectRatio: true, responsive: true }} />     {/* Display the Doughnut chart */}
             </div>
         </div>
     );
 };
 
-export default Charts;
+export default AssignedTicketChart;
