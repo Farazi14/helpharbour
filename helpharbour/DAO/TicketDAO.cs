@@ -134,5 +134,24 @@ namespace helpharbour.DAO
             );
         }
 
+
+
+        //get ticket counts by status of a user
+        public Dictionary<string, int> GetAssignedCountsByStatusForUser(string userId)                                // using dictionary to store the ticket counts by status
+        {
+            var aggregationResult = ticket_Collection.Aggregate()                                                   // aggregate the tickets collection in MongoDB to get the ticket counts by status
+                .Match(new BsonDocument { { "assigned", userId } })                                                // match the tickets with the given user ID
+                .Group(new BsonDocument {
+                                         { "_id", "$status" },
+                                         { "count", new BsonDocument("$sum", 1) }
+                })
+                .ToList();
+
+            return aggregationResult.ToDictionary(                                                                 // convert the aggregation result to dictionary defining the key and value
+                k => k["_id"].AsString,                                                                            // key is the status
+                v => v["count"].AsInt32                                                                            // value is the count of tickets with the status
+            );
+        }
+
     }
 }

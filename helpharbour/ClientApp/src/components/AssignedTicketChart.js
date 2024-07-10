@@ -13,16 +13,16 @@ const AssignedTicketChart = () => {
         // Fetch data for the chart
         const fetchData = async () => {
             try {
-                const response = await fetch(`/api/ticket/user/${user.userID}/status-counts`);      //API call to get the status counts for the user
+                const response = await fetch(`/api/ticket/user/${user.userID}/assign-counts`);      //API call to get the status counts for the user
                 if (response.ok) {
                     const data = await response.json();
                     
                     setChartData({                                                                  //Setting Chart Data by defining the label and dataset values            
-                        labels: ['Assigned', 'Unassigned', 'Closed'],
+                        labels: ['Assigned', 'Opened', 'Closed'],
                         datasets: [
                             {
                                 label: 'Ticket Status Counts',
-                                data: [data.assignedCount, data.unassignedCount, data.resolvedCount],
+                                data: [data.assignedCount, data.openCount, data.closeCount],
                                 backgroundColor: [
                                     '#36A2EB',
                                     '#FF6384',

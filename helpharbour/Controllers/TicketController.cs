@@ -238,5 +238,31 @@ namespace helpharbour.Controllers
             }
         }
 
+        //implementation to get ticket counts by status for a user
+        [HttpGet("user/{userId}/assign-counts")]
+        public ActionResult GetAssignedCountsByStatusForUser(string userId)
+        {
+
+            _logger.LogInformation("GetAssignedCountsByStatusForUser method is called, {userID} ", userId);
+            try
+            {
+                var ticketCounts = _ticketDAO.GetAssignedCountsByStatusForUser(userId);
+                if (ticketCounts == null || !ticketCounts.Any())
+                    return NotFound("No ticket status counts found for the user.");
+
+                return Ok(new                                                                                               // return the ticket counts by status for the user 
+                {
+                    assignedCount = ticketCounts.GetValueOrDefault("Assigned", 0),                                          // get the assigned count from the dictionary and if not found then return 0
+                    openCount = ticketCounts.GetValueOrDefault("Open", 0),                                      // get the unassigned count from the dictionary and if not found then return 0
+                    closeCount = ticketCounts.GetValueOrDefault("Close", 0)                                           // get the resolved count from the dictionary and if not found then return 0
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to fetch ticket status counts.");
+                return StatusCode(500, "Internal server error");
+            }
+        }
+
     }
 }
