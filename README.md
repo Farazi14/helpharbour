@@ -1,5 +1,5 @@
-# Help Hardour - Service Desk System
-Welcome to the Help Hardour's official repository! The project is a small scale example of a service desk system designed with the concept of optimising IT operations for any organisation. Essentially, the system is used to lodge IT issues so that the IT deperatment can handle those issues using industrial best practices.
+# Help Harbour - Service Desk System
+Welcome to the Help Harbour's official repository! The project is a small scale example of a service desk system designed with the concept of optimising IT operations for any organisation. Essentially, the system is used to lodge IT issues so that the IT deperatment can handle those issues using industrial best practices.
 ## 🌟 Features
 - **Dashboard Analytics:** Provides a comprehensive dashboard with real-time analytics on service requests, status updates, and resolution metrics, enabling better decision-making and resource allocation.
 - **User Role Management:** Implements flexible role-based access control, allowing for detailed customisation of user permissions tailored to organizational needs. 
@@ -15,7 +15,7 @@ The following technologies were used in the creation of the application.
 - **MongoDB Atlas:** MongoDB Atlas serves as the cloud database platform, providing a fully-managed MongoDB service that offers scalability, high availability, and geographical distribution.
 ## 🚀 Getting Started
 ### Prerequisites
-To run the "Help Hardour" application on your local machine, follow these straightforward steps:
+To run the "Help Harbour" application on your local machine, follow these straightforward steps:
 1. **Fork the Repository:**
    - Navigate to the GitHub page of the repository.
    - Click the "Fork" button at the top right to create your own copy of the repository in your GitHub account.
