@@ -1,0 +1,6 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/helpharbour/Properties/launchSettings.json
+/helpharbour/ClientApp/package-lock.json
